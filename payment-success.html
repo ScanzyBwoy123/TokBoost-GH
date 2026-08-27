@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta name="theme-color" content="#000000">
+
+  <title>Payment Status — TokBoost GH</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f7f8;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: white;
+      border-radius: 24px;
+      padding: 40px 28px;
+      text-align: center;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, .08);
+    }
+
+    .icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: #111;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 30px;
+    }
+
+    p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .details {
+      margin-top: 25px;
+      padding: 18px;
+      background: #f5f5f5;
+      border-radius: 15px;
+      text-align: left;
+      display: none;
+    }
+
+    .details div {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 7px 0;
+      font-size: 14px;
+    }
+
+    .details strong {
+      text-align: right;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .error {
+      color: #b00020;
+    }
+
+    .loading {
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="card">
+
+    <div class="icon" id="statusIcon">
+      ⏳
+    </div>
+
+    <h1 id="statusTitle">
+      Verifying payment...
+    </h1>
+
+    <p id="statusMessage" class="loading">
+      Please wait while we confirm your transaction with Paystack.
+    </p>
+
+    <div class="details" id="paymentDetails">
+
+      <div>
+        <span>Package</span>
+        <strong id="packageName">—</strong>
+      </div>
+
+      <div>
+        <span>Amount</span>
+        <strong id="amount">—</strong>
+      </div>
+
+      <div>
+        <span>Reference</span>
+        <strong id="reference">—</strong>
+      </div>
+
+    </div>
+
+    <a
+      href="/"
+      class="button"
+      id="homeButton"
+      style="display:none;"
+    >
+      Back to TokBoost GH
+    </a>
+
+  </main>
+
+  <script>
+    async function verifyPayment() {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      const reference =
+        params.get("reference");
+
+      const packageName =
+        localStorage.getItem(
+          "tokboost_package_name"
+        );
+
+      const storedReference =
+        localStorage.getItem(
+          "tokboost_payment_reference"
+        );
+
+      // ------------------------------------------------------
+      // Make sure we actually have a Paystack reference.
+      // ------------------------------------------------------
+
+      if (!reference) {
+        showError(
+          "No payment reference was found."
+        );
+
+        return;
+      }
+
+      // ------------------------------------------------------
+      // Use the returned Paystack reference.
+      // ------------------------------------------------------
+
+      const paymentReference =
+        reference || storedReference;
+
+      if (!packageName) {
+        showError(
+          "The selected package could not be identified."
+        );
+
+        return;
+      }
+
+      try {
+
+        const response =
+          await fetch(
+            "/.netlify/functions/verify-payment",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                reference:
+                  paymentReference,
+
+                packageName:
+                  packageName
+              })
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !data.status ||
+          !data.paid
+        ) {
+          throw new Error(
+            data.error ||
+            "Payment could not be verified."
+          );
+        }
+
+        // ----------------------------------------------------
+        // Payment successfully verified.
+        // ----------------------------------------------------
+
+        document.getElementById(
+          "statusIcon"
+        ).textContent = "✓";
+
+        document.getElementById(
+          "statusTitle"
+        ).textContent =
+          "Payment Successful!";
+
+        document.getElementById(
+          "statusMessage"
+        ).textContent =
+          "Your payment has been successfully verified.";
+
+        document.getElementById(
+          "statusMessage"
+        ).className = "";
+
+        document.getElementById(
+          "packageName"
+        ).textContent =
+          data.packageName;
+
+        document.getElementById(
+          "amount"
+        ).textContent =
+          "GH₵" + data.amount;
+
+        document.getElementById(
+          "reference"
+        ).textContent =
+          data.reference;
+
+        document.getElementById(
+          "paymentDetails"
+        ).style.display = "block";
+
+        document.getElementById(
+          "homeButton"
+        ).style.display = "inline-block";
+
+        // ----------------------------------------------------
+        // Clean up local storage.
+        // ----------------------------------------------------
+
+        localStorage.removeItem(
+          "tokboost_package_name"
+        );
+
+        localStorage.removeItem(
+          "tokboost_payment_reference"
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Payment verification error:",
+          error
+        );
+
+        showError(
+          error.message ||
+          "We could not verify the payment."
+        );
+      }
+    }
+
+    function showError(message) {
+
+      document.getElementById(
+        "statusIcon"
+      ).textContent = "×";
+
+      document.getElementById(
+        "statusTitle"
+      ).textContent =
+        "Payment Not Verified";
+
+      const messageElement =
+        document.getElementById(
+          "statusMessage"
+        );
+
+      messageElement.textContent =
+        message;
+
+      messageElement.className =
+        "error";
+
+      document.getElementById(
+        "homeButton"
+      ).style.display =
+        "inline-block";
+    }
+
+    verifyPayment();
+  </script>
+
+</body>
+</html>
