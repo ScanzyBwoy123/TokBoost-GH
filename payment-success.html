@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
@@ -79,6 +80,7 @@
 
     .details strong {
       text-align: right;
+      word-break: break-word;
     }
 
     .button {
@@ -148,200 +150,243 @@
 
   </main>
 
- <script>
-  async function verifyPayment() {
+  <script>
 
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
+    // ========================================================
+    // TOKBOOST GH
+    // PAYMENT SUCCESS / VERIFICATION PAGE
+    // ========================================================
 
-    // Paystack may return either reference or trxref.
-    const urlReference =
-      params.get("reference") ||
-      params.get("trxref");
+    async function verifyPayment() {
 
-    const storedReference =
-      localStorage.getItem(
-        "tokboost_payment_reference"
-      );
+      // ------------------------------------------------------
+      // 1. Get Paystack reference from the URL
+      // ------------------------------------------------------
 
-    const packageName =
-      localStorage.getItem(
-        "tokboost_package_name"
-      );
-
-    // Use the URL reference first, then saved reference.
-    const paymentReference =
-      urlReference ||
-      storedReference;
-
-    // ------------------------------------------------------
-    // Check that we have a transaction reference.
-    // ------------------------------------------------------
-
-    if (!paymentReference) {
-      showError(
-        "No payment reference was found. Please contact TokBoost GH support."
-      );
-      return;
-    }
-
-    // ------------------------------------------------------
-    // Check that we know which package was purchased.
-    // ------------------------------------------------------
-
-    if (!packageName) {
-      showError(
-        "The selected package could not be identified. Please contact TokBoost GH support."
-      );
-      return;
-    }
-
-    try {
-
-      const response =
-        await fetch(
-          "/.netlify/functions/verify-payment",
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body: JSON.stringify({
-              reference:
-                paymentReference,
-
-              packageName:
-                packageName
-            })
-          }
+      const params =
+        new URLSearchParams(
+          window.location.search
         );
 
-      const data =
-        await response.json();
+      const reference =
+        params.get("reference");
 
-      if (
-        !response.ok ||
-        !data.status ||
-        !data.paid
-      ) {
-        throw new Error(
-          data.error ||
-          "Payment could not be verified."
+      // Some Paystack redirects may use trxref.
+      // Support both formats.
+      const trxref =
+        params.get("trxref");
+
+      const paymentReference =
+        reference || trxref;
+
+      // ------------------------------------------------------
+      // 2. Make sure we have a payment reference
+      // ------------------------------------------------------
+
+      if (!paymentReference) {
+
+        showError(
+          "No payment reference was found. Please contact TokBoost GH support."
         );
+
+        return;
       }
 
-      // ----------------------------------------------------
-      // PAYMENT VERIFIED SUCCESSFULLY
-      // ----------------------------------------------------
-
-      document.getElementById(
-        "statusIcon"
-      ).textContent = "✓";
-
-      document.getElementById(
-        "statusTitle"
-      ).textContent =
-        "Payment Successful!";
-
-      document.getElementById(
-        "statusMessage"
-      ).textContent =
-        "Your payment has been successfully verified. Your promotion order has been received.";
-
-      document.getElementById(
-        "statusMessage"
-      ).className = "";
-
-      document.getElementById(
-        "packageName"
-      ).textContent =
-        data.packageName;
-
-      document.getElementById(
-        "amount"
-      ).textContent =
-        "GH₵" + data.amount;
+      // ------------------------------------------------------
+      // 3. Show reference immediately
+      // ------------------------------------------------------
 
       document.getElementById(
         "reference"
       ).textContent =
-        data.reference;
+        paymentReference;
+
+      try {
+
+        // ----------------------------------------------------
+        // 4. Ask our secure Netlify Function to verify
+        //    the payment with Paystack.
+        //
+        // IMPORTANT:
+        // We only send the reference.
+        //
+        // The server gets the package name and amount
+        // directly from Paystack transaction metadata.
+        // ----------------------------------------------------
+
+        const response =
+          await fetch(
+            "/.netlify/functions/verify-payment",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                reference:
+                  paymentReference
+              })
+            }
+          );
+
+        // ----------------------------------------------------
+        // 5. Read server response safely
+        // ----------------------------------------------------
+
+        let data;
+
+        try {
+          data =
+            await response.json();
+        } catch (jsonError) {
+
+          throw new Error(
+            "The payment verification service returned an invalid response."
+          );
+        }
+
+        // ----------------------------------------------------
+        // 6. Check verification result
+        // ----------------------------------------------------
+
+        if (
+          !response.ok ||
+          !data.status ||
+          !data.paid
+        ) {
+
+          throw new Error(
+            data.error ||
+            "Payment could not be verified."
+          );
+        }
+
+        // ----------------------------------------------------
+        // 7. PAYMENT SUCCESS
+        // ----------------------------------------------------
+
+        document.getElementById(
+          "statusIcon"
+        ).textContent = "✓";
+
+        document.getElementById(
+          "statusTitle"
+        ).textContent =
+          "Payment Successful!";
+
+        document.getElementById(
+          "statusMessage"
+        ).textContent =
+          "Your payment has been successfully verified.";
+
+        document.getElementById(
+          "statusMessage"
+        ).className = "";
+
+        // ----------------------------------------------------
+        // 8. Display package information returned by server
+        // ----------------------------------------------------
+
+        document.getElementById(
+          "packageName"
+        ).textContent =
+          data.packageName ||
+          "Promotion Campaign";
+
+        document.getElementById(
+          "amount"
+        ).textContent =
+          "GH₵" +
+          Number(data.amount || 0).toFixed(2);
+
+        document.getElementById(
+          "reference"
+        ).textContent =
+          data.reference ||
+          paymentReference;
+
+        document.getElementById(
+          "paymentDetails"
+        ).style.display =
+          "block";
+
+        document.getElementById(
+          "homeButton"
+        ).style.display =
+          "inline-block";
+
+        // ----------------------------------------------------
+        // 9. Clean up old localStorage values if they exist.
+        //
+        // These are no longer required for verification.
+        // ----------------------------------------------------
+
+        localStorage.removeItem(
+          "tokboost_package_name"
+        );
+
+        localStorage.removeItem(
+          "tokboost_payment_reference"
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Payment verification error:",
+          error
+        );
+
+        showError(
+          error.message ||
+          "We could not verify the payment."
+        );
+      }
+    }
+
+
+    // ========================================================
+    // SHOW ERROR
+    // ========================================================
+
+    function showError(message) {
 
       document.getElementById(
-        "paymentDetails"
-      ).style.display =
-        "block";
+        "statusIcon"
+      ).textContent = "×";
+
+      document.getElementById(
+        "statusTitle"
+      ).textContent =
+        "Payment Not Verified";
+
+      const messageElement =
+        document.getElementById(
+          "statusMessage"
+        );
+
+      messageElement.textContent =
+        message;
+
+      messageElement.className =
+        "error";
 
       document.getElementById(
         "homeButton"
       ).style.display =
         "inline-block";
-
-      // ----------------------------------------------------
-      // Payment has been verified.
-      // Clear temporary browser data.
-      // ----------------------------------------------------
-
-      localStorage.removeItem(
-        "tokboost_package_name"
-      );
-
-      localStorage.removeItem(
-        "tokboost_payment_reference"
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Payment verification error:",
-        error
-      );
-
-      showError(
-        error.message ||
-        "We could not verify the payment."
-      );
     }
-  }
 
 
-  function showError(message) {
+    // ========================================================
+    // START VERIFICATION
+    // ========================================================
 
-    document.getElementById(
-      "statusIcon"
-    ).textContent = "×";
+    verifyPayment();
 
-    document.getElementById(
-      "statusTitle"
-    ).textContent =
-      "Payment Not Verified";
-
-    const messageElement =
-      document.getElementById(
-        "statusMessage"
-      );
-
-    messageElement.textContent =
-      message;
-
-    messageElement.className =
-      "error";
-
-    document.getElementById(
-      "homeButton"
-    ).style.display =
-      "inline-block";
-  }
-
-
-  // Start verification automatically.
-  verifyPayment();
-</script> 
+  </script>
 
 </body>
 </html>
