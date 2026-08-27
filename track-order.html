@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order - TokBoost GH</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 520px;
+      margin: 50px auto;
+    }
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.08);
+    }
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: .6;
+    }
+    .message {
+      display: none;
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 10px;
+    }
+    .error {
+      background: #ffe9e9;
+      color: #a00000;
+    }
+    .success {
+      background: #e9fff0;
+      color: #08752c;
+    }
+    .order {
+      display: none;
+      margin-top: 20px;
+    }
+    .status {
+      padding: 16px;
+      border-radius: 12px;
+      background: #fff4cc;
+      color: #806000;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .row strong {
+      text-align: right;
+      word-break: break-word;
+    }
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+      color: #111;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>📦 Track Your Order</h1>
+      <p class="subtitle">
+        Enter your payment reference to check your order.
+      </p>
+      <label for="reference">
+        Payment Reference
+      </label>
+      <input
+        id="reference"
+        type="text"
+        placeholder="Enter payment reference"
+        autocomplete="off"
+      >
+      <button id="trackButton">
+        Track My Order
+      </button>
+      <div id="message" class="message"></div>
+      <div id="order" class="order">
+        <div id="status" class="status">
+          🟡 Order Received
+        </div>
+        <div class="row">
+          <span>Reference</span>
+          <strong id="orderReference">—</strong>
+        </div>
+        <div class="row">
+          <span>Package</span>
+          <strong id="packageName">—</strong>
+        </div>
+        <div class="row">
+          <span>Amount</span>
+          <strong id="amount">—</strong>
+        </div>
+        <div class="row">
+          <span>Username</span>
+          <strong id="username">—</strong>
+        </div>
+        <div class="row">
+          <span>Email</span>
+          <strong id="email">—</strong>
+        </div>
+      </div>
+      <a class="back" href="/">
+        ← Back to TokBoost GH
+      </a>
+    </div>
+  </div>
+<script>
+const referenceInput =
+  document.getElementById("reference");
+const trackButton =
+  document.getElementById("trackButton");
+const message =
+  document.getElementById("message");
+const order =
+  document.getElementById("order");
+const statusBox =
+  document.getElementById("status");
+const orderReference =
+  document.getElementById("orderReference");
+const packageName =
+  document.getElementById("packageName");
+const amount =
+  document.getElementById("amount");
+const username =
+  document.getElementById("username");
+const email =
+  document.getElementById("email");
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className =
+    "message " + type;
+  message.style.display = "block";
+}
+function hideMessage() {
+  message.style.display = "none";
+}
+function getValue(data, names) {
+  for (const name of names) {
+    if (
+      data[name] !== undefined &&
+      data[name] !== null &&
+      data[name] !== ""
+    ) {
+      return data[name];
+    }
+  }
+  return "—";
+}
+async function trackOrder() {
+  const reference =
+    referenceInput.value.trim();
+  if (!reference) {
+    showMessage(
+      "Please enter your payment reference.",
+      "error"
+    );
+    return;
+  }
+  hideMessage();
+  order.style.display = "none";
+  trackButton.disabled = true;
+  trackButton.textContent =
+    "Checking order...";
+  try {
+    const response = await fetch(
+      "/.netlify/functions/get-order?reference=" +
+      encodeURIComponent(reference)
+    );
+    const data =
+      await response.json();
+    if (!response.ok || !data.status) {
+      showMessage(
+        data.error ||
+        "We could not find your order.",
+        "error"
+      );
+      return;
+    }
+    const orderData =
+      data.order || {};
+    orderReference.textContent =
+      getValue(
+        orderData,
+        ["reference", "payment_reference"]
+      );
+    packageName.textContent =
+      getValue(
+        orderData,
+        ["packageName", "package_name", "package"]
+      );
+    const orderAmount =
+      getValue(
+        orderData,
+        ["amount", "amountGHS"]
+      );
+    amount.textContent =
+      orderAmount === "—"
+        ? "—"
+        : "GH₵" + orderAmount;
+    username.textContent =
+      getValue(
+        orderData,
+        [
+          "username",
+          "tiktokTarget",
+          "tiktok_target",
+          "tiktok_username"
+        ]
+      );
+    email.textContent =
+      getValue(
+        orderData,
+        [
+          "email",
+          "customerEmail",
+          "customer_email"
+        ]
+      );
+    const currentStatus =
+      getValue(
+        orderData,
+        ["status", "order_status"]
+      );
+    if (currentStatus !== "—") {
+      const normalized =
+        String(currentStatus).toLowerCase();
+      if (
+        normalized === "completed" ||
+        normalized === "complete"
+      ) {
+        statusBox.textContent =
+          "🟢 Order Completed";
+      } else if (
+        normalized === "processing" ||
+        normalized === "pending"
+      ) {
+        statusBox.textContent =
+          "🔵 Order Processing";
+      } else {
+        statusBox.textContent =
+          "🟡 " + currentStatus;
+      }
+    } else {
+      statusBox.textContent =
+        "🟡 Order Received";
+    }
+    order.style.display =
+      "block";
+    showMessage(
+      "Order found successfully.",
+      "success"
+    );
+  } catch (error) {
+    console.error(
+      "Tracking error:",
+      error
+    );
+    showMessage(
+      "Unable to connect to the order service. Please try again.",
+      "error"
+    );
+  } finally {
+    trackButton.disabled = false;
+    trackButton.textContent =
+      "Track My Order";
+  }
+}
+// Button
+trackButton.addEventListener(
+  "click",
+  trackOrder
+);
+// Press Enter
+referenceInput.addEventListener(
+  "keydown",
+  function(event) {
+    if (event.key === "Enter") {
+      trackOrder();
+    }
+  }
+);
+// Automatically read reference from URL
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+const urlReference =
+  params.get("reference");
+if (urlReference) {
+  referenceInput.value =
+    urlReference;
+  trackOrder();
+}
+</script>
+</body>
+</html>
