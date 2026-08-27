@@ -916,13 +916,15 @@
         );
       }
 
-      // Save the payment reference locally so the
-      // success page can identify the transaction.
+      // Save the selected package so the
+      // payment-success page can identify the order.
+      localStorage.setItem(
+        "tokboost_package_name",
+        selectedPackageName
+      );
+
+      // Save the Paystack transaction reference.
       if (data.reference) {
-        localStorage.setItem(
-  "tokboost_package_name",
-  selectedPackageName
-);
         localStorage.setItem(
           "tokboost_payment_reference",
           data.reference
@@ -953,7 +955,8 @@
       );
 
       button.disabled = false;
-      button.textContent = "Continue to Payment";
+      button.textContent =
+        "Continue to Payment";
     }
   }
 
