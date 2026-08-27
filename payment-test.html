@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TokBoost Payment Test</title>
+</head>
+<body>
+
+  <h1>Payment Verification Test</h1>
+
+  <p id="status">Checking payment...</p>
+
+  <script>
+    async function testPayment() {
+
+      const status =
+        document.getElementById("status");
+
+      try {
+
+        const response =
+          await fetch(
+            "/.netlify/functions/verify-payment",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                reference:
+                  "TOKBOOST-1787844663564-7ZH2H7",
+
+                packageName:
+                  "Starter Promotion"
+              })
+            }
+          );
+
+        const data =
+          await response.json();
+
+        console.log(
+          "Verification result:",
+          data
+        );
+
+        if (
+          data.status &&
+          data.paid
+        ) {
+          status.innerHTML =
+            "<strong>✅ PAYMENT VERIFIED</strong><br><br>" +
+            "Package: " +
+            data.packageName +
+            "<br>" +
+            "Amount: GH₵" +
+            data.amount +
+            "<br>" +
+            "Reference: " +
+            data.reference;
+        } else {
+          status.innerHTML =
+            "<strong>❌ PAYMENT NOT VERIFIED</strong><br><br>" +
+            (data.error ||
+             "Unknown verification error.");
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+        status.innerHTML =
+          "<strong>❌ ERROR</strong><br><br>" +
+          error.message;
+      }
+    }
+
+    testPayment();
+  </script>
+
+</body>
+</html>
