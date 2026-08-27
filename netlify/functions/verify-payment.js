@@ -19,18 +19,15 @@ exports.handler = async (event) => {
   }
 
   try {
+    // --------------------------------------------------------
+    // 1. Read request body
+    // --------------------------------------------------------
+
     const body = JSON.parse(event.body || "{}");
 
-    const {
-      reference,
-      packageName
-    } = body;
+    const reference = body.reference;
 
-    // --------------------------------------------------------
-    // 1. Validate request
-    // --------------------------------------------------------
-
-    if (!reference || !packageName) {
+    if (!reference) {
       return {
         statusCode: 400,
         headers: {
@@ -38,50 +35,23 @@ exports.handler = async (event) => {
         },
         body: JSON.stringify({
           status: false,
-          error: "Payment reference and package are required."
+          paid: false,
+          error: "Payment reference is required."
         })
       };
     }
 
     // --------------------------------------------------------
-    // 2. Server-side package prices
-    // --------------------------------------------------------
-
-    const packages = {
-      "Starter Promotion": 10,
-      "1,000 Reach Campaign": 40,
-      "5,000 Reach Campaign": 150,
-      "Creator Growth": 250,
-      "Premium Growth": 500
-    };
-
-    const expectedAmount =
-      packages[packageName];
-
-    if (!expectedAmount) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          status: false,
-          error: "Invalid package."
-        })
-      };
-    }
-
-    // --------------------------------------------------------
-    // 3. Get Paystack secret key
+    // 2. Get Paystack secret key
     // --------------------------------------------------------
 
     const secretKey =
-  process.env.PAYSTACK_API_KEY;
+      process.env.PAYSTACK_API_KEY;
 
     if (!secretKey) {
-  console.error(
-    "PAYSTACK_API_KEY is not configured."
-  );
+      console.error(
+        "PAYSTACK_API_KEY is not configured."
+      );
 
       return {
         statusCode: 500,
@@ -90,13 +60,14 @@ exports.handler = async (event) => {
         },
         body: JSON.stringify({
           status: false,
+          paid: false,
           error: "Payment service is not configured."
         })
       };
     }
 
     // --------------------------------------------------------
-    // 4. Ask Paystack to verify transaction
+    // 3. Verify transaction with Paystack
     // --------------------------------------------------------
 
     const response = await fetch(
@@ -117,7 +88,7 @@ exports.handler = async (event) => {
     const data =
       await response.json();
 
-    if (!response.ok || !data.status) {
+    if (!response.ok || !data.status || !data.data) {
       console.error(
         "Paystack verification failed:",
         data
@@ -133,7 +104,9 @@ exports.handler = async (event) => {
 
         body: JSON.stringify({
           status: false,
+          paid: false,
           error:
+            data.message ||
             "Unable to verify payment."
         })
       };
@@ -143,7 +116,7 @@ exports.handler = async (event) => {
       data.data;
 
     // --------------------------------------------------------
-    // 5. Check transaction status
+    // 4. Check transaction status
     // --------------------------------------------------------
 
     if (transaction.status !== "success") {
@@ -165,7 +138,7 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 6. Check currency
+    // 5. Check currency
     // --------------------------------------------------------
 
     if (transaction.currency !== "GHS") {
@@ -187,9 +160,88 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 7. Check amount
-    //
-    // Paystack returns amount in pesewas.
+    // 6. Get package from Paystack metadata
+    // --------------------------------------------------------
+
+    const metadata =
+      transaction.metadata || {};
+
+    const packageName =
+      metadata.packageName;
+
+    const amountGHS =
+      Number(
+        metadata.amountGHS ||
+        Number(transaction.amount) / 100
+      );
+
+    // --------------------------------------------------------
+    // 7. Make sure package information exists
+    // --------------------------------------------------------
+
+    if (!packageName) {
+      console.error(
+        "Package name missing from Paystack metadata:",
+        metadata
+      );
+
+      return {
+        statusCode: 400,
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          status: false,
+          paid: false,
+          error:
+            "Package information was not found for this payment."
+        })
+      };
+    }
+
+    // --------------------------------------------------------
+    // 8. Server-side package prices
+    // --------------------------------------------------------
+
+    const packages = {
+      "Starter Promotion": 10,
+      "1,000 Reach Campaign": 40,
+      "5,000 Reach Campaign": 150,
+      "Creator Growth": 250,
+      "Premium Growth": 500
+    };
+
+    const expectedAmount =
+      packages[packageName];
+
+    if (!expectedAmount) {
+      console.error(
+        "Unknown package from Paystack:",
+        packageName
+      );
+
+      return {
+        statusCode: 400,
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          status: false,
+          paid: false,
+          error:
+            "Invalid package associated with this payment."
+        })
+      };
+    }
+
+    // --------------------------------------------------------
+    // 9. Check amount
     // --------------------------------------------------------
 
     const expectedAmountInPesewas =
@@ -204,6 +256,7 @@ exports.handler = async (event) => {
         {
           expected:
             expectedAmountInPesewas,
+
           received:
             transaction.amount
         }
@@ -227,7 +280,7 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 8. Payment successfully verified
+    // 10. Payment successfully verified
     // --------------------------------------------------------
 
     return {
@@ -282,6 +335,7 @@ exports.handler = async (event) => {
 
       body: JSON.stringify({
         status: false,
+        paid: false,
         error:
           "Something went wrong while verifying payment."
       })
