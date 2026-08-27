@@ -811,67 +811,154 @@
   <!-- =========================
        JAVASCRIPT
   ========================= -->
-  <script>
-    let selectedPackageName = "";
-    let selectedPackagePrice = 0;
-    function openOrder(packageName, price) {
-      selectedPackageName = packageName;
-      selectedPackagePrice = price;
-      document.getElementById("selectedPackage").textContent =
-        packageName;
-      document.getElementById("selectedPrice").textContent =
-        "GH₵" + price;
-      document.getElementById("orderModal")
-        .classList.add("active");
-      document.body.style.overflow = "hidden";
+<script>
+  let selectedPackageName = "";
+  let selectedPackagePrice = 0;
+
+  function openOrder(packageName, price) {
+    selectedPackageName = packageName;
+    selectedPackagePrice = price;
+
+    document.getElementById("selectedPackage").textContent =
+      packageName;
+
+    document.getElementById("selectedPrice").textContent =
+      "GH₵" + price;
+
+    document.getElementById("orderModal")
+      .classList.add("active");
+
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeOrder() {
+    document.getElementById("orderModal")
+      .classList.remove("active");
+
+    document.body.style.overflow = "";
+  }
+
+  function openCustomOrder() {
+    alert(
+      "Custom campaigns will be available soon. " +
+      "For now, please contact us directly."
+    );
+  }
+
+  async function submitOrder(event) {
+    event.preventDefault();
+
+    const button =
+      document.getElementById("continueButton");
+
+    const name =
+      document.getElementById("customerName")
+        .value.trim();
+
+    const email =
+      document.getElementById("customerEmail")
+        .value.trim();
+
+    const target =
+      document.getElementById("tiktokTarget")
+        .value.trim();
+
+    if (!name || !email || !target) {
+      alert("Please complete all fields.");
+      return;
     }
-    function closeOrder() {
-      document.getElementById("orderModal")
-        .classList.remove("active");
-      document.body.style.overflow = "";
+
+    // Basic TikTok URL validation
+    if (
+      !target.includes("tiktok.com") &&
+      !target.includes("vm.tiktok.com")
+    ) {
+      alert("Please enter a valid TikTok profile or video link.");
+      return;
     }
-    function openCustomOrder() {
-      alert(
-        "Custom campaigns will be available soon. " +
-        "For now, please contact us directly."
+
+    // Prevent duplicate clicks
+    button.disabled = true;
+    button.textContent = "Connecting to Paystack...";
+
+    try {
+      const response = await fetch(
+        "/.netlify/functions/create-payment",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            customerName: name,
+            email: email,
+
+            // The server will determine the real price.
+            packageName: selectedPackageName,
+
+            // TikTok profile/video being promoted.
+            tiktokTarget: target
+          })
+        }
       );
-    }
-    function submitOrder(event) {
-      event.preventDefault();
-      const name =
-        document.getElementById("customerName").value.trim();
-      const email =
-        document.getElementById("customerEmail").value.trim();
-      const target =
-        document.getElementById("tiktokTarget").value.trim();
-      if (!name || !email || !target) {
-        alert("Please complete all fields.");
+
+      const data = await response.json();
+
+      if (!response.ok || !data.status) {
+        throw new Error(
+          data.error ||
+          "Unable to start payment."
+        );
+      }
+
+      // Save the payment reference locally so the
+      // success page can identify the transaction.
+      if (data.reference) {
+        localStorage.setItem(
+          "tokboost_payment_reference",
+          data.reference
+        );
+      }
+
+      // Redirect customer to Paystack checkout.
+      if (data.authorization_url) {
+        window.location.href =
+          data.authorization_url;
         return;
       }
-      /*
-        PAYMENT WILL BE CONNECTED IN VERSION 2.
-        IMPORTANT:
-        Do not put a Paystack secret key in this HTML file.
-        The next version will send the order to a secure
-        Netlify Function and initialize Paystack from there.
-      */
-      alert(
-        "Order information received!\\n\\n" +
-        "Package: " + selectedPackageName + "\\n" +
-        "Amount: GH₵" + selectedPackagePrice + "\\n" +
-        "Email: " + email + "\\n\\n" +
-        "Paystack checkout will be connected in Version 2."
+
+      throw new Error(
+        "Paystack did not return a checkout URL."
       );
-      closeOrder();
+
+    } catch (error) {
+
+      console.error(
+        "Payment error:",
+        error
+      );
+
+      alert(
+        error.message ||
+        "Something went wrong. Please try again."
+      );
+
+      button.disabled = false;
+      button.textContent = "Continue to Payment";
     }
-    document.getElementById("orderModal")
-      .addEventListener("click", function(event) {
-        if (event.target === this) {
-          closeOrder();
-        }
-      });
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-  </script>
-</body>
-</html>
+  }
+
+  // Close modal when clicking outside the box.
+  document.getElementById("orderModal")
+    .addEventListener("click", function(event) {
+      if (event.target === this) {
+        closeOrder();
+      }
+    });
+
+  // Update footer year automatically.
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+</script>  
