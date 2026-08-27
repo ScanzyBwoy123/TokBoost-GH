@@ -16,21 +16,20 @@
       color: #111;
       min-height: 100vh;
     }
-    .topbar {
+    header {
       background: #000;
       color: #fff;
       padding: 18px 20px;
       text-align: center;
+      font-size: 21px;
       font-weight: 900;
-      font-size: 20px;
     }
-    .topbar span {
+    header span {
       color: #ff2d55;
     }
     .container {
-      width: 100%;
       max-width: 650px;
-      margin: 0 auto;
+      margin: auto;
       padding: 35px 18px 60px;
     }
     .card {
@@ -38,11 +37,13 @@
       border-radius: 24px;
       padding: 30px 22px;
       box-shadow: 0 10px 35px rgba(0,0,0,.08);
+    }
+    .center {
       text-align: center;
     }
     .icon {
-      width: 75px;
-      height: 75px;
+      width: 76px;
+      height: 76px;
       margin: 0 auto 18px;
       border-radius: 50%;
       display: grid;
@@ -53,7 +54,7 @@
       font-weight: 900;
     }
     h1 {
-      font-size: 32px;
+      font-size: 30px;
       margin-bottom: 10px;
     }
     .subtitle {
@@ -66,12 +67,13 @@
       border: 1px solid #f1df9e;
       border-radius: 16px;
       padding: 18px;
-      margin-bottom: 25px;
+      margin: 25px 0;
       text-align: left;
     }
     .status-title {
+      font-size: 18px;
       font-weight: 900;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
     .status-text {
       color: #6f5b00;
@@ -79,10 +81,8 @@
       line-height: 1.5;
     }
     .details {
-      text-align: left;
+      margin-top: 20px;
       border-top: 1px solid #eee;
-      margin-top: 10px;
-      padding-top: 10px;
     }
     .row {
       display: flex;
@@ -98,12 +98,11 @@
     .value {
       font-weight: 800;
       text-align: right;
-      word-break: break-word;
       max-width: 60%;
+      word-break: break-word;
     }
     .progress {
-      margin: 28px 0;
-      text-align: left;
+      margin-top: 28px;
     }
     .progress-title {
       font-weight: 900;
@@ -111,46 +110,37 @@
     }
     .step {
       display: flex;
-      align-items: flex-start;
       gap: 13px;
       margin-bottom: 18px;
+      text-align: left;
     }
     .circle {
-      flex-shrink: 0;
       width: 30px;
       height: 30px;
+      flex-shrink: 0;
       border-radius: 50%;
-      display: grid;
-      place-items: center;
       background: #eee;
       color: #777;
-      font-size: 13px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
       font-weight: 900;
     }
-    .step.done .circle {
+    .circle.done {
       background: #159447;
-      color: white;
+      color: #fff;
     }
-    .step.active .circle {
+    .circle.active {
       background: #111;
-      color: white;
+      color: #fff;
     }
     .step strong {
       display: block;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
     .step small {
       color: #777;
       line-height: 1.4;
-    }
-    .support {
-      margin-top: 25px;
-      padding: 17px;
-      background: #f7f7f8;
-      border-radius: 15px;
-      font-size: 13px;
-      line-height: 1.6;
-      color: #555;
     }
     .button {
       display: block;
@@ -161,24 +151,39 @@
       background: #111;
       color: #fff;
       font-weight: 900;
-      cursor: pointer;
-      margin-top: 20px;
+      text-align: center;
       text-decoration: none;
+      margin-top: 25px;
     }
     .button:hover {
       background: #333;
     }
+    .secondary {
+      background: #f1f1f3;
+      color: #111;
+    }
     .loading {
-      padding: 25px;
+      text-align: center;
       color: #666;
+      padding: 25px;
     }
     .error {
       background: #fff0f0;
       border: 1px solid #f2b8b8;
       color: #9b1c1c;
-      padding: 18px;
       border-radius: 14px;
+      padding: 18px;
       line-height: 1.5;
+      text-align: left;
+    }
+    .support {
+      margin-top: 25px;
+      padding: 17px;
+      border-radius: 15px;
+      background: #f7f7f8;
+      color: #555;
+      font-size: 13px;
+      line-height: 1.6;
     }
     @media (max-width: 500px) {
       .card {
@@ -192,321 +197,366 @@
         gap: 5px;
       }
       .value {
-        text-align: left;
         max-width: 100%;
+        text-align: left;
       }
     }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    Tok<span>Boost</span> GH
-  </div>
-  <main class="container">
-    <div class="card" id="app">
-      <div class="loading">
-        Verifying your payment...
-      </div>
+<header>
+  Tok<span>Boost</span> GH
+</header>
+<main class="container">
+  <div class="card" id="app">
+    <div class="loading">
+      Verifying your payment and loading your order...
     </div>
-  </main>
-  <script>
-    // ============================================================
-    // TOKBOOST GH
-    // PAYMENT SUCCESS PAGE
-    // ============================================================
-    function escapeHTML(value) {
-      return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-    function getReference() {
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-      return (
-        params.get("reference") ||
-        params.get("trxref") ||
-        localStorage.getItem(
-          "tokboost_payment_reference"
-        ) ||
-        ""
+  </div>
+</main>
+<script>
+  function escapeHTML(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+  function getReference() {
+    const params =
+      new URLSearchParams(
+        window.location.search
       );
-    }
-    async function verifyPayment() {
-      const app =
-        document.getElementById("app");
-      const reference =
-        getReference();
-      if (!reference) {
-        app.innerHTML = `
+    return (
+      params.get("reference") ||
+      params.get("trxref") ||
+      localStorage.getItem(
+        "tokboost_payment_reference"
+      ) ||
+      ""
+    );
+  }
+  async function verifyPayment() {
+    const app =
+      document.getElementById("app");
+    const reference =
+      getReference();
+    if (!reference) {
+      app.innerHTML = `
+        <div class="center">
           <div class="icon">!</div>
           <h1>Payment Received</h1>
           <p class="subtitle">
-            We could not find the payment reference
-            needed to verify this transaction.
+            We could not find your payment reference.
           </p>
-          <div class="error">
-            Please contact TokBoost GH support with
-            your Paystack receipt or payment reference.
-          </div>
-          <a class="button" href="/">
-            Back to TokBoost GH
-          </a>
-        `;
-        return;
-      }
-      try {
-        const response =
-          await fetch(
-            "/.netlify/functions/verify-payment",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-              body: JSON.stringify({
-                reference: reference
-              })
-            }
-          );
-        const data =
-          await response.json();
-        if (
-          !response.ok ||
-          !data.status ||
-          !data.paid
-        ) {
-          throw new Error(
-            data.error ||
-            "Payment could not be verified."
-          );
-        }
-        // Save useful information locally.
-        localStorage.setItem(
-          "tokboost_payment_reference",
-          data.reference || reference
+        </div>
+        <div class="error">
+          Please do not make another payment.
+          <br><br>
+          If money was deducted from your account,
+          contact TokBoost GH support with your
+          Paystack payment receipt.
+        </div>
+        <a
+          class="button"
+          href="/"
+        >
+          Back to TokBoost GH
+        </a>
+      `;
+      return;
+    }
+    try {
+      // --------------------------------------------------------
+      // VERIFY PAYMENT
+      // --------------------------------------------------------
+      const verifyResponse =
+        await fetch(
+          "/.netlify/functions/verify-payment",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+              reference: reference
+            })
+          }
         );
-        if (data.packageName) {
-          localStorage.setItem(
-            "tokboost_package_name",
-            data.packageName
-          );
-        }
-        // --------------------------------------------------------
-        // SUCCESS SCREEN
-        // --------------------------------------------------------
-        app.innerHTML = `
+      const verification =
+        await verifyResponse.json();
+      if (
+        !verifyResponse.ok ||
+        !verification.status ||
+        !verification.paid
+      ) {
+        throw new Error(
+          verification.error ||
+          "Payment could not be verified."
+        );
+      }
+      const finalReference =
+        verification.reference ||
+        reference;
+      localStorage.setItem(
+        "tokboost_payment_reference",
+        finalReference
+      );
+      // --------------------------------------------------------
+      // GET SAVED ORDER FROM SUPABASE
+      // --------------------------------------------------------
+      const orderResponse =
+        await fetch(
+          `/.netlify/functions/get-order?reference=${encodeURIComponent(finalReference)}`
+        );
+      const orderData =
+        await orderResponse.json();
+      if (
+        !orderResponse.ok ||
+        !orderData.status ||
+        !orderData.order
+      ) {
+        throw new Error(
+          orderData.error ||
+          "Your payment was verified, but your order is still being prepared."
+        );
+      }
+      const order =
+        orderData.order;
+      // --------------------------------------------------------
+      // DISPLAY ORDER
+      // --------------------------------------------------------
+      app.innerHTML = `
+        <div class="center">
           <div class="icon">✓</div>
-          <h1>Payment Successful!</h1>
+          <h1>
+            Payment Successful!
+          </h1>
           <p class="subtitle">
-            Your payment has been successfully verified.
-            Your TokBoost GH order has been received.
+            Your payment has been successfully
+            verified and your order has been received.
           </p>
-          <div class="status">
-            <div class="status-title">
-              🟡 Order Processing
+        </div>
+        <div class="status">
+          <div class="status-title">
+            🟡 Order Processing
+          </div>
+          <div class="status-text">
+            Your order is now being processed.
+            You do not need to make another payment.
+          </div>
+        </div>
+        <div class="details">
+          <div class="row">
+            <div class="label">
+              Package
             </div>
-            <div class="status-text">
-              Your order has been created and is now
-              being prepared. You do not need to make
-              another payment.
+            <div class="value">
+              ${escapeHTML(
+                order.packageName
+              )}
             </div>
           </div>
-          <div class="details">
-            <div class="row">
-              <div class="label">
-                Package
-              </div>
-              <div class="value">
-                ${escapeHTML(
-                  data.packageName ||
-                  "TokBoost Campaign"
-                )}
-              </div>
+          <div class="row">
+            <div class="label">
+              Amount
             </div>
-            <div class="row">
-              <div class="label">
-                Amount
-              </div>
-              <div class="value">
-                GH₵${escapeHTML(
-                  Number(data.amount || 0)
-                    .toFixed(2)
-                )}
-              </div>
+            <div class="value">
+              GH₵${escapeHTML(
+                Number(order.amount || 0)
+                  .toFixed(2)
+              )}
             </div>
-            <div class="row">
-              <div class="label">
-                Reference
-              </div>
-              <div class="value">
-                ${escapeHTML(
-                  data.reference ||
-                  reference
-                )}
-              </div>
+          </div>
+          <div class="row">
+            <div class="label">
+              Payment Reference
             </div>
-            ${
-              data.customerName
-                ? `
-                  <div class="row">
-                    <div class="label">
-                      Customer
-                    </div>
-                    <div class="value">
-                      ${escapeHTML(
-                        data.customerName
-                      )}
-                    </div>
+            <div class="value">
+              ${escapeHTML(
+                order.reference
+              )}
+            </div>
+          </div>
+          ${
+            order.customerName
+              ? `
+                <div class="row">
+                  <div class="label">
+                    Customer
                   </div>
-                `
-                : ""
-            }
-            ${
-              data.tiktokTarget
-                ? `
-                  <div class="row">
-                    <div class="label">
-                      TikTok Target
-                    </div>
-                    <div class="value">
-                      ${escapeHTML(
-                        data.tiktokTarget
-                      )}
-                    </div>
+                  <div class="value">
+                    ${escapeHTML(
+                      order.customerName
+                    )}
                   </div>
-                `
-                : ""
-            }
-            ${
-              data.orderId
-                ? `
-                  <div class="row">
-                    <div class="label">
-                      Order ID
-                    </div>
-                    <div class="value">
-                      ${escapeHTML(
-                        data.orderId
-                      )}
-                    </div>
+                </div>
+              `
+              : ""
+          }
+          ${
+            order.tiktokTarget
+              ? `
+                <div class="row">
+                  <div class="label">
+                    TikTok Target
                   </div>
-                `
-                : ""
-            }
-          </div>
-          <div class="progress">
-            <div class="progress-title">
-              Order Progress
+                  <div class="value">
+                    ${escapeHTML(
+                      order.tiktokTarget
+                    )}
+                  </div>
+                </div>
+              `
+              : ""
+          }
+          <div class="row">
+            <div class="label">
+              Order Status
             </div>
-            <div class="step done">
-              <div class="circle">
-                ✓
-              </div>
-              <div>
-                <strong>
-                  Payment Received
-                </strong>
-                <small>
-                  Your payment has been confirmed.
-                </small>
-              </div>
-            </div>
-            <div class="step active">
-              <div class="circle">
-                2
-              </div>
-              <div>
-                <strong>
-                  Order Processing
-                </strong>
-                <small>
-                  Your promotion order is being prepared.
-                </small>
-              </div>
-            </div>
-            <div class="step">
-              <div class="circle">
-                3
-              </div>
-              <div>
-                <strong>
-                  Promotion In Progress
-                </strong>
-                <small>
-                  Your campaign will move to this stage
-                  when processing begins.
-                </small>
-              </div>
-            </div>
-            <div class="step">
-              <div class="circle">
-                4
-              </div>
-              <div>
-                <strong>
-                  Completed
-                </strong>
-                <small>
-                  You will be notified when the order
-                  is completed.
-                </small>
-              </div>
+            <div class="value">
+              ${escapeHTML(
+                order.status ||
+                "processing"
+              )}
             </div>
           </div>
-          <a
-            class="button"
-            href="/"
-          >
-            Back to TokBoost GH
-          </a>
-          <div class="support">
-            Need help with your order?
-            Contact TokBoost GH support at
-            <strong>
-              herokujunior1@gmail.com
-            </strong>
-            and include your payment reference.
+        </div>
+        <div class="progress">
+          <div class="progress-title">
+            Order Progress
           </div>
-        `;
-      } catch (error) {
-        console.error(
-          "Payment verification error:",
-          error
-        );
-        app.innerHTML = `
-          <div class="icon">!</div>
-          <h1>Payment Received</h1>
+          <div class="step">
+            <div class="circle done">
+              ✓
+            </div>
+            <div>
+              <strong>
+                Payment Received
+              </strong>
+              <small>
+                Your payment has been successfully verified.
+              </small>
+            </div>
+          </div>
+          <div class="step">
+            <div class="circle active">
+              2
+            </div>
+            <div>
+              <strong>
+                Order Processing
+              </strong>
+              <small>
+                Your TokBoost order is being prepared.
+              </small>
+            </div>
+          </div>
+          <div class="step">
+            <div class="circle">
+              3
+            </div>
+            <div>
+              <strong>
+                Promotion In Progress
+              </strong>
+              <small>
+                This stage will update when fulfillment begins.
+              </small>
+            </div>
+          </div>
+          <div class="step">
+            <div class="circle">
+              4
+            </div>
+            <div>
+              <strong>
+                Completed
+              </strong>
+              <small>
+                Your order will be marked completed after fulfillment.
+              </small>
+            </div>
+          </div>
+        </div>
+        <a
+          class="button"
+          href="/track-order.html?reference=${encodeURIComponent(
+            order.reference
+          )}"
+        >
+          Track My Order
+        </a>
+        <a
+          class="button secondary"
+          href="/"
+        >
+          Back to TokBoost GH
+        </a>
+        <div class="support">
+          Need help?
+          Contact TokBoost GH support and include
+          your payment reference.
+        </div>
+      `;
+    } catch (error) {
+      console.error(
+        "Payment success error:",
+        error
+      );
+      app.innerHTML = `
+        <div class="center">
+          <div class="icon">✓</div>
+          <h1>
+            Payment Received
+          </h1>
           <p class="subtitle">
-            Your payment may have been received,
-            but we could not complete the verification
-            on this page.
+            Your payment reference has been received.
           </p>
-          <div class="error">
-            <strong>
-              Reference:
-            </strong>
-            ${escapeHTML(reference)}
-            <br><br>
-            Please do not make another payment.
-            Contact TokBoost GH support if this
-            message remains.
+        </div>
+        <div class="status">
+          <div class="status-title">
+            🟡 Processing Your Order
           </div>
-          <a
-            class="button"
-            href="/"
-          >
-            Back to TokBoost GH
-          </a>
-        `;
-      }
+          <div class="status-text">
+            We are checking your order information.
+            <strong>
+              Please do not make another payment.
+            </strong>
+          </div>
+        </div>
+        <div class="error">
+          <strong>
+            Payment Reference:
+          </strong>
+          <br>
+          ${escapeHTML(reference)}
+          <br><br>
+          Your payment may already be successful.
+          If the order does not appear shortly,
+          contact TokBoost GH support with this
+          reference.
+        </div>
+        <a
+          class="button"
+          href="/track-order.html?reference=${encodeURIComponent(
+            reference
+          )}"
+        >
+          Track My Order
+        </a>
+        <a
+          class="button secondary"
+          href="/"
+        >
+          Back to TokBoost GH
+        </a>
+      `;
     }
-    verifyPayment();
-  </script>
+  }
+  verifyPayment();
+</script>
 </body>
 </html>
