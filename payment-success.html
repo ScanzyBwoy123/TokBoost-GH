@@ -2,391 +2,511 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta name="theme-color" content="#000000">
-
-  <title>Payment Status — TokBoost GH</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful — TokBoost GH</title>
   <style>
     * {
       box-sizing: border-box;
-    }
-
-    body {
       margin: 0;
-      min-height: 100vh;
+      padding: 0;
+    }
+    body {
       font-family: Arial, Helvetica, sans-serif;
-      background: #f7f7f8;
+      background: #f5f5f7;
       color: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      min-height: 100vh;
     }
-
-    .card {
-      width: 100%;
-      max-width: 520px;
-      background: white;
-      border-radius: 24px;
-      padding: 40px 28px;
+    .topbar {
+      background: #000;
+      color: #fff;
+      padding: 18px 20px;
       text-align: center;
-      box-shadow: 0 15px 50px rgba(0, 0, 0, .08);
+      font-weight: 900;
+      font-size: 20px;
     }
-
+    .topbar span {
+      color: #ff2d55;
+    }
+    .container {
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+      padding: 35px 18px 60px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 30px 22px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.08);
+      text-align: center;
+    }
     .icon {
-      width: 72px;
-      height: 72px;
-      margin: 0 auto 20px;
+      width: 75px;
+      height: 75px;
+      margin: 0 auto 18px;
       border-radius: 50%;
-      background: #111;
-      color: white;
       display: grid;
       place-items: center;
-      font-size: 32px;
+      background: #e8fff1;
+      color: #159447;
+      font-size: 38px;
+      font-weight: 900;
     }
-
     h1 {
-      margin: 0 0 12px;
-      font-size: 30px;
+      font-size: 32px;
+      margin-bottom: 10px;
     }
-
-    p {
+    .subtitle {
       color: #666;
       line-height: 1.6;
+      margin-bottom: 25px;
     }
-
-    .details {
-      margin-top: 25px;
+    .status {
+      background: #fff8df;
+      border: 1px solid #f1df9e;
+      border-radius: 16px;
       padding: 18px;
-      background: #f5f5f5;
-      border-radius: 15px;
+      margin-bottom: 25px;
       text-align: left;
-      display: none;
     }
-
-    .details div {
+    .status-title {
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+    .status-text {
+      color: #6f5b00;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .details {
+      text-align: left;
+      border-top: 1px solid #eee;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+    .row {
       display: flex;
       justify-content: space-between;
-      gap: 15px;
-      padding: 7px 0;
-      font-size: 14px;
+      gap: 20px;
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
     }
-
-    .details strong {
+    .label {
+      color: #777;
+      font-size: 13px;
+    }
+    .value {
+      font-weight: 800;
       text-align: right;
       word-break: break-word;
+      max-width: 60%;
     }
-
-    .button {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 14px 22px;
-      border-radius: 12px;
+    .progress {
+      margin: 28px 0;
+      text-align: left;
+    }
+    .progress-title {
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      margin-bottom: 18px;
+    }
+    .circle {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #eee;
+      color: #777;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .step.done .circle {
+      background: #159447;
+      color: white;
+    }
+    .step.active .circle {
       background: #111;
       color: white;
+    }
+    .step strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+    .step small {
+      color: #777;
+      line-height: 1.4;
+    }
+    .support {
+      margin-top: 25px;
+      padding: 17px;
+      background: #f7f7f8;
+      border-radius: 15px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #555;
+    }
+    .button {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      background: #111;
+      color: #fff;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 20px;
       text-decoration: none;
-      font-weight: 800;
     }
-
-    .error {
-      color: #b00020;
+    .button:hover {
+      background: #333;
     }
-
     .loading {
+      padding: 25px;
       color: #666;
+    }
+    .error {
+      background: #fff0f0;
+      border: 1px solid #f2b8b8;
+      color: #9b1c1c;
+      padding: 18px;
+      border-radius: 14px;
+      line-height: 1.5;
+    }
+    @media (max-width: 500px) {
+      .card {
+        padding: 25px 17px;
+      }
+      h1 {
+        font-size: 27px;
+      }
+      .row {
+        flex-direction: column;
+        gap: 5px;
+      }
+      .value {
+        text-align: left;
+        max-width: 100%;
+      }
     }
   </style>
 </head>
-
 <body>
-
-  <main class="card">
-
-    <div class="icon" id="statusIcon">
-      ⏳
+  <div class="topbar">
+    Tok<span>Boost</span> GH
+  </div>
+  <main class="container">
+    <div class="card" id="app">
+      <div class="loading">
+        Verifying your payment...
+      </div>
     </div>
-
-    <h1 id="statusTitle">
-      Verifying payment...
-    </h1>
-
-    <p id="statusMessage" class="loading">
-      Please wait while we confirm your transaction with Paystack.
-    </p>
-
-    <div class="details" id="paymentDetails">
-
-      <div>
-        <span>Package</span>
-        <strong id="packageName">—</strong>
-      </div>
-
-      <div>
-        <span>Amount</span>
-        <strong id="amount">—</strong>
-      </div>
-
-      <div>
-        <span>Reference</span>
-        <strong id="reference">—</strong>
-      </div>
-
-    </div>
-
-    <a
-      href="/"
-      class="button"
-      id="homeButton"
-      style="display:none;"
-    >
-      Back to TokBoost GH
-    </a>
-
   </main>
-
   <script>
-
-    // ========================================================
+    // ============================================================
     // TOKBOOST GH
-    // PAYMENT SUCCESS / VERIFICATION PAGE
-    // ========================================================
-
-    async function verifyPayment() {
-
-      // ------------------------------------------------------
-      // 1. Get Paystack reference from the URL
-      // ------------------------------------------------------
-
+    // PAYMENT SUCCESS PAGE
+    // ============================================================
+    function escapeHTML(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+    function getReference() {
       const params =
         new URLSearchParams(
           window.location.search
         );
-
+      return (
+        params.get("reference") ||
+        params.get("trxref") ||
+        localStorage.getItem(
+          "tokboost_payment_reference"
+        ) ||
+        ""
+      );
+    }
+    async function verifyPayment() {
+      const app =
+        document.getElementById("app");
       const reference =
-        params.get("reference");
-
-      // Some Paystack redirects may use trxref.
-      // Support both formats.
-      const trxref =
-        params.get("trxref");
-
-      const paymentReference =
-        reference || trxref;
-
-      // ------------------------------------------------------
-      // 2. Make sure we have a payment reference
-      // ------------------------------------------------------
-
-      if (!paymentReference) {
-
-        showError(
-          "No payment reference was found. Please contact TokBoost GH support."
-        );
-
+        getReference();
+      if (!reference) {
+        app.innerHTML = `
+          <div class="icon">!</div>
+          <h1>Payment Received</h1>
+          <p class="subtitle">
+            We could not find the payment reference
+            needed to verify this transaction.
+          </p>
+          <div class="error">
+            Please contact TokBoost GH support with
+            your Paystack receipt or payment reference.
+          </div>
+          <a class="button" href="/">
+            Back to TokBoost GH
+          </a>
+        `;
         return;
       }
-
-      // ------------------------------------------------------
-      // 3. Show reference immediately
-      // ------------------------------------------------------
-
-      document.getElementById(
-        "reference"
-      ).textContent =
-        paymentReference;
-
       try {
-
-        // ----------------------------------------------------
-        // 4. Ask our secure Netlify Function to verify
-        //    the payment with Paystack.
-        //
-        // IMPORTANT:
-        // We only send the reference.
-        //
-        // The server gets the package name and amount
-        // directly from Paystack transaction metadata.
-        // ----------------------------------------------------
-
         const response =
           await fetch(
             "/.netlify/functions/verify-payment",
             {
               method: "POST",
-
               headers: {
                 "Content-Type":
                   "application/json"
               },
-
               body: JSON.stringify({
-                reference:
-                  paymentReference
+                reference: reference
               })
             }
           );
-
-        // ----------------------------------------------------
-        // 5. Read server response safely
-        // ----------------------------------------------------
-
-        let data;
-
-        try {
-          data =
-            await response.json();
-        } catch (jsonError) {
-
-          throw new Error(
-            "The payment verification service returned an invalid response."
-          );
-        }
-
-        // ----------------------------------------------------
-        // 6. Check verification result
-        // ----------------------------------------------------
-
+        const data =
+          await response.json();
         if (
           !response.ok ||
           !data.status ||
           !data.paid
         ) {
-
           throw new Error(
             data.error ||
             "Payment could not be verified."
           );
         }
-
-        // ----------------------------------------------------
-        // 7. PAYMENT SUCCESS
-        // ----------------------------------------------------
-
-        document.getElementById(
-          "statusIcon"
-        ).textContent = "✓";
-
-        document.getElementById(
-          "statusTitle"
-        ).textContent =
-          "Payment Successful!";
-
-        document.getElementById(
-          "statusMessage"
-        ).textContent =
-          "Your payment has been successfully verified.";
-
-        document.getElementById(
-          "statusMessage"
-        ).className = "";
-
-        // ----------------------------------------------------
-        // 8. Display package information returned by server
-        // ----------------------------------------------------
-
-        document.getElementById(
-          "packageName"
-        ).textContent =
-          data.packageName ||
-          "Promotion Campaign";
-
-        document.getElementById(
-          "amount"
-        ).textContent =
-          "GH₵" +
-          Number(data.amount || 0).toFixed(2);
-
-        document.getElementById(
-          "reference"
-        ).textContent =
-          data.reference ||
-          paymentReference;
-
-        document.getElementById(
-          "paymentDetails"
-        ).style.display =
-          "block";
-
-        document.getElementById(
-          "homeButton"
-        ).style.display =
-          "inline-block";
-
-        // ----------------------------------------------------
-        // 9. Clean up old localStorage values if they exist.
-        //
-        // These are no longer required for verification.
-        // ----------------------------------------------------
-
-        localStorage.removeItem(
-          "tokboost_package_name"
+        // Save useful information locally.
+        localStorage.setItem(
+          "tokboost_payment_reference",
+          data.reference || reference
         );
-
-        localStorage.removeItem(
-          "tokboost_payment_reference"
-        );
-
+        if (data.packageName) {
+          localStorage.setItem(
+            "tokboost_package_name",
+            data.packageName
+          );
+        }
+        // --------------------------------------------------------
+        // SUCCESS SCREEN
+        // --------------------------------------------------------
+        app.innerHTML = `
+          <div class="icon">✓</div>
+          <h1>Payment Successful!</h1>
+          <p class="subtitle">
+            Your payment has been successfully verified.
+            Your TokBoost GH order has been received.
+          </p>
+          <div class="status">
+            <div class="status-title">
+              🟡 Order Processing
+            </div>
+            <div class="status-text">
+              Your order has been created and is now
+              being prepared. You do not need to make
+              another payment.
+            </div>
+          </div>
+          <div class="details">
+            <div class="row">
+              <div class="label">
+                Package
+              </div>
+              <div class="value">
+                ${escapeHTML(
+                  data.packageName ||
+                  "TokBoost Campaign"
+                )}
+              </div>
+            </div>
+            <div class="row">
+              <div class="label">
+                Amount
+              </div>
+              <div class="value">
+                GH₵${escapeHTML(
+                  Number(data.amount || 0)
+                    .toFixed(2)
+                )}
+              </div>
+            </div>
+            <div class="row">
+              <div class="label">
+                Reference
+              </div>
+              <div class="value">
+                ${escapeHTML(
+                  data.reference ||
+                  reference
+                )}
+              </div>
+            </div>
+            ${
+              data.customerName
+                ? `
+                  <div class="row">
+                    <div class="label">
+                      Customer
+                    </div>
+                    <div class="value">
+                      ${escapeHTML(
+                        data.customerName
+                      )}
+                    </div>
+                  </div>
+                `
+                : ""
+            }
+            ${
+              data.tiktokTarget
+                ? `
+                  <div class="row">
+                    <div class="label">
+                      TikTok Target
+                    </div>
+                    <div class="value">
+                      ${escapeHTML(
+                        data.tiktokTarget
+                      )}
+                    </div>
+                  </div>
+                `
+                : ""
+            }
+            ${
+              data.orderId
+                ? `
+                  <div class="row">
+                    <div class="label">
+                      Order ID
+                    </div>
+                    <div class="value">
+                      ${escapeHTML(
+                        data.orderId
+                      )}
+                    </div>
+                  </div>
+                `
+                : ""
+            }
+          </div>
+          <div class="progress">
+            <div class="progress-title">
+              Order Progress
+            </div>
+            <div class="step done">
+              <div class="circle">
+                ✓
+              </div>
+              <div>
+                <strong>
+                  Payment Received
+                </strong>
+                <small>
+                  Your payment has been confirmed.
+                </small>
+              </div>
+            </div>
+            <div class="step active">
+              <div class="circle">
+                2
+              </div>
+              <div>
+                <strong>
+                  Order Processing
+                </strong>
+                <small>
+                  Your promotion order is being prepared.
+                </small>
+              </div>
+            </div>
+            <div class="step">
+              <div class="circle">
+                3
+              </div>
+              <div>
+                <strong>
+                  Promotion In Progress
+                </strong>
+                <small>
+                  Your campaign will move to this stage
+                  when processing begins.
+                </small>
+              </div>
+            </div>
+            <div class="step">
+              <div class="circle">
+                4
+              </div>
+              <div>
+                <strong>
+                  Completed
+                </strong>
+                <small>
+                  You will be notified when the order
+                  is completed.
+                </small>
+              </div>
+            </div>
+          </div>
+          <a
+            class="button"
+            href="/"
+          >
+            Back to TokBoost GH
+          </a>
+          <div class="support">
+            Need help with your order?
+            Contact TokBoost GH support at
+            <strong>
+              herokujunior1@gmail.com
+            </strong>
+            and include your payment reference.
+          </div>
+        `;
       } catch (error) {
-
         console.error(
           "Payment verification error:",
           error
         );
-
-        showError(
-          error.message ||
-          "We could not verify the payment."
-        );
+        app.innerHTML = `
+          <div class="icon">!</div>
+          <h1>Payment Received</h1>
+          <p class="subtitle">
+            Your payment may have been received,
+            but we could not complete the verification
+            on this page.
+          </p>
+          <div class="error">
+            <strong>
+              Reference:
+            </strong>
+            ${escapeHTML(reference)}
+            <br><br>
+            Please do not make another payment.
+            Contact TokBoost GH support if this
+            message remains.
+          </div>
+          <a
+            class="button"
+            href="/"
+          >
+            Back to TokBoost GH
+          </a>
+        `;
       }
     }
-
-
-    // ========================================================
-    // SHOW ERROR
-    // ========================================================
-
-    function showError(message) {
-
-      document.getElementById(
-        "statusIcon"
-      ).textContent = "×";
-
-      document.getElementById(
-        "statusTitle"
-      ).textContent =
-        "Payment Not Verified";
-
-      const messageElement =
-        document.getElementById(
-          "statusMessage"
-        );
-
-      messageElement.textContent =
-        message;
-
-      messageElement.className =
-        "error";
-
-      document.getElementById(
-        "homeButton"
-      ).style.display =
-        "inline-block";
-    }
-
-
-    // ========================================================
-    // START VERIFICATION
-    // ========================================================
-
     verifyPayment();
-
   </script>
-
 </body>
 </html>
