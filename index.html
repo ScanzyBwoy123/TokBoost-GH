@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>TokBoost Ghana — TikTok Growth</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f7f8;
+      color: #111;
+      line-height: 1.5;
+    }
+    button,
+    input {
+      font: inherit;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    /* =========================
+       HEADER
+    ========================= */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.96);
+      color: white;
+      border-bottom: 1px solid #222;
+    }
+    .nav {
+      max-width: 1150px;
+      margin: auto;
+      min-height: 68px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+    .logo span {
+      color: #ff2d55;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #ddd;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .nav-links a:hover {
+      color: white;
+    }
+    .nav-button {
+      background: white;
+      color: black !important;
+      padding: 10px 16px;
+      border-radius: 999px;
+    }
+    /* =========================
+       HERO
+    ========================= */
+    .hero {
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,45,85,.30), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(37,244,238,.22), transparent 30%),
+        #000;
+      color: white;
+      padding: 90px 20px 100px;
+    }
+    .hero-content {
+      max-width: 1050px;
+      margin: auto;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border: 1px solid #444;
+      border-radius: 999px;
+      font-size: 13px;
+      color: #ddd;
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      max-width: 850px;
+      margin: auto;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1;
+      letter-spacing: -3px;
+    }
+    .hero h1 span {
+      background: linear-gradient(90deg, #ff2d55, #25f4ee);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero p {
+      max-width: 650px;
+      margin: 25px auto;
+      color: #bbb;
+      font-size: 18px;
+    }
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    .primary-btn,
+    .secondary-btn {
+      border: none;
+      padding: 15px 23px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: .2s;
+    }
+    .primary-btn {
+      background: white;
+      color: black;
+    }
+    .secondary-btn {
+      background: #222;
+      color: white;
+      border: 1px solid #444;
+    }
+    .primary-btn:hover,
+    .secondary-btn:hover {
+      transform: translateY(-2px);
+    }
+    /* =========================
+       SECTION
+    ========================= */
+    section {
+      padding: 75px 20px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .section-title h2 {
+      font-size: clamp(30px, 5vw, 46px);
+      letter-spacing: -1.5px;
+    }
+    .section-title p {
+      color: #666;
+      max-width: 600px;
+      margin: 10px auto;
+    }
+    /* =========================
+       PACKAGES
+    ========================= */
+    .packages {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .package {
+      background: white;
+      border: 1px solid #e5e5e5;
+      border-radius: 22px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.04);
+      transition: .2s;
+    }
+    .package:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,.08);
+    }
+    .package.popular {
+      border: 2px solid #111;
+      position: relative;
+    }
+    .popular-label {
+      position: absolute;
+      top: -13px;
+      left: 24px;
+      background: #111;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .package-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #f1f1f1;
+      font-size: 23px;
+      margin-bottom: 18px;
+    }
+    .package h3 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .package-description {
+      color: #666;
+      font-size: 14px;
+      min-height: 45px;
+    }
+    .price {
+      margin: 20px 0;
+      font-size: 31px;
+      font-weight: 900;
+    }
+    .price small {
+      font-size: 13px;
+      font-weight: 500;
+      color: #777;
+    }
+    .features {
+      list-style: none;
+      margin-bottom: 22px;
+      flex: 1;
+    }
+    .features li {
+      font-size: 14px;
+      margin: 8px 0;
+      color: #444;
+    }
+    .features li::before {
+      content: "✓";
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    .buy-btn {
+      width: 100%;
+      border: none;
+      background: #111;
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .buy-btn:hover {
+      background: #333;
+    }
+    /* =========================
+       HOW IT WORKS
+    ========================= */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .step {
+      background: white;
+      padding: 28px;
+      border-radius: 20px;
+      border: 1px solid #e5e5e5;
+    }
+    .step-number {
+      font-size: 13px;
+      font-weight: 900;
+      color: #777;
+      margin-bottom: 15px;
+    }
+    .step h3 {
+      margin-bottom: 8px;
+    }
+    .step p {
+      color: #666;
+      font-size: 14px;
+    }
+    /* =========================
+       TRUST
+    ========================= */
+    .trust {
+      background: #111;
+      color: white;
+    }
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .trust-card {
+      border: 1px solid #333;
+      border-radius: 20px;
+      padding: 28px;
+    }
+    .trust-card .icon {
+      font-size: 27px;
+      margin-bottom: 12px;
+    }
+    .trust-card p {
+      color: #aaa;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    /* =========================
+       ORDER MODAL
+    ========================= */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,.7);
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      border-radius: 24px;
+      padding: 30px;
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      right: 18px;
+      top: 15px;
+      border: none;
+      background: #f1f1f1;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .modal-box h2 {
+      margin-bottom: 5px;
+    }
+    .selected-package {
+      background: #f5f5f5;
+      border-radius: 14px;
+      padding: 14px;
+      margin: 20px 0;
+    }
+    .form-group {
+      margin-bottom: 17px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 11px;
+      outline: none;
+    }
+    .form-group input:focus {
+      border-color: #111;
+    }
+    .continue-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      background: #111;
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+    .notice {
+      background: #fff8e6;
+      border: 1px solid #f1df9e;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #765d00;
+      margin-bottom: 15px;
+    }
+    /* =========================
+       FOOTER
+    ========================= */
+    footer {
+      background: #000;
+      color: #aaa;
+      text-align: center;
+      padding: 35px 20px;
+      font-size: 13px;
+    }
+    footer strong {
+      color: white;
+    }
+    /* =========================
+       RESPONSIVE
+    ========================= */
+    @media (max-width: 850px) {
+      .packages {
+        grid-template-columns: 1fr 1fr;
+      }
+      .steps,
+      .trust-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .nav {
+        min-height: 60px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero {
+        padding: 70px 18px 80px;
+      }
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+      .hero p {
+        font-size: 16px;
+      }
+      section {
+        padding: 55px 18px;
+      }
+      .packages {
+        grid-template-columns: 1fr;
+      }
+      .package {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- =========================
+       HEADER
+  ========================= -->
+  <header>
+    <nav class="nav">
+      <a href="#" class="logo">Tok<span>Boost</span> GH</a>
+      <div class="nav-links">
+        <a href="#packages">Packages</a>
+        <a href="#how">How It Works</a>
+        <a href="#trust">Why Us</a>
+        <a href="#packages" class="nav-button">Get Started</a>
+      </div>
+    </nav>
+  </header>
+  <!-- =========================
+       HERO
+  ========================= -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="badge">
+        🇬🇭 TikTok Growth Services for Ghana
+      </div>
+      <h1>
+        Grow Your TikTok
+        <span>Presence.</span>
+      </h1>
+      <p>
+        Get professional promotion campaigns designed to help
+        creators and businesses reach more people on TikTok.
+      </p>
+      <div class="hero-buttons">
+        <a href="#packages" class="primary-btn">
+          View Packages
+        </a>
+        <a href="#how" class="secondary-btn">
+          How It Works
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- =========================
+       PACKAGES
+  ========================= -->
+  <section id="packages">
+    <div class="container">
+      <div class="section-title">
+        <h2>Choose Your Package</h2>
+        <p>
+          Select a campaign that matches your growth goals.
+          All prices are displayed in Ghana cedis.
+        </p>
+      </div>
+      <div class="packages">
+        <!-- PACKAGE 1 -->
+        <div class="package">
+          <div class="package-icon">🚀</div>
+          <h3>Starter Promotion</h3>
+          <p class="package-description">
+            A simple starting campaign for creators testing
+            TikTok promotion.
+          </p>
+          <div class="price">
+            GH₵10
+            <small>/ campaign</small>
+          </div>
+          <ul class="features">
+            <li>Promotion setup</li>
+            <li>Audience targeting</li>
+            <li>Campaign report</li>
+          </ul>
+          <button
+            class="buy-btn"
+            onclick="openOrder('Starter Promotion', 10)">
+            Get Started
+          </button>
+        </div>
+        <!-- PACKAGE 2 -->
+        <div class="package popular">
+          <div class="popular-label">
+            MOST POPULAR
+          </div>
+          <div class="package-icon">🔥</div>
+          <h3>1,000 Reach Campaign</h3>
+          <p class="package-description">
+            Designed to help your content reach a larger
+            relevant audience.
+          </p>
+          <div class="price">
+            GH₵40
+            <small>/ campaign</small>
+          </div>
+          <ul class="features">
+            <li>Targeted promotion</li>
+            <li>Audience selection</li>
+            <li>Campaign monitoring</li>
+            <li>Performance report</li>
+          </ul>
+          <button
+            class="buy-btn"
+            onclick="openOrder('1,000 Reach Campaign', 40)">
+            Buy Package
+          </button>
+        </div>
+        <!-- PACKAGE 3 -->
+        <div class="package">
+          <div class="package-icon">📈</div>
+          <h3>5,000 Reach Campaign</h3>
+          <p class="package-description">
+            A larger campaign for creators who want broader
+            content exposure.
+          </p>
+          <div class="price">
+            GH₵150
+            <small>/ campaign</small>
+          </div>
+          <ul class="features">
+            <li>Larger audience targeting</li>
+            <li>Campaign monitoring</li>
+            <li>Performance tracking</li>
+            <li>Detailed report</li>
+          </ul>
+          <button
+            class="buy-btn"
+            onclick="openOrder('5,000 Reach Campaign', 150)">
+            Buy Package
+          </button>
+        </div>
+        <!-- PACKAGE 4 -->
+        <div class="package">
+          <div class="package-icon">🎯</div>
+          <h3>Creator Growth</h3>
+          <p class="package-description">
+            A more complete growth package for serious
+            creators.
+          </p>
+          <div class="price">
+            GH₵250
+            <small>/ package</small>
+          </div>
+          <ul class="features">
+            <li>Growth consultation</li>
+            <li>Content strategy</li>
+            <li>Promotion campaign</li>
+            <li>Performance report</li>
+          </ul>
+          <button
+            class="buy-btn"
+            onclick="openOrder('Creator Growth', 250)">
+            Buy Package
+          </button>
+        </div>
+        <!-- PACKAGE 5 -->
+        <div class="package">
+          <div class="package-icon">👑</div>
+          <h3>Premium Growth</h3>
+          <p class="package-description">
+            Our largest package for creators and businesses
+            looking for an extended campaign.
+          </p>
+          <div class="price">
+            GH₵500
+            <small>/ package</small>
+          </div>
+          <ul class="features">
+            <li>Growth strategy</li>
+            <li>Multiple campaigns</li>
+            <li>Audience targeting</li>
+            <li>Performance analytics</li>
+            <li>Detailed reporting</li>
+          </ul>
+          <button
+            class="buy-btn"
+            onclick="openOrder('Premium Growth', 500)">
+            Buy Package
+          </button>
+        </div>
+        <!-- CUSTOM -->
+        <div class="package">
+          <div class="package-icon">💬</div>
+          <h3>Custom Campaign</h3>
+          <p class="package-description">
+            Need something different? Build a campaign
+            around your specific goals.
+          </p>
+          <div class="price">
+            Custom
+          </div>
+          <ul class="features">
+            <li>Custom audience</li>
+            <li>Custom campaign size</li>
+            <li>Personalized strategy</li>
+          </ul>
+          <button
+            class="buy-btn"
+            onclick="openCustomOrder()">
+            Contact Us
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- =========================
+       HOW IT WORKS
+  ========================= -->
+  <section id="how">
+    <div class="container">
+      <div class="section-title">
+        <h2>How It Works</h2>
+        <p>
+          Getting started takes only a few minutes.
+        </p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3>Choose a Package</h3>
+          <p>
+            Select the campaign that fits your TikTok
+            growth goals.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3>Submit Your Content</h3>
+          <p>
+            Enter your TikTok username or the URL of the
+            content you want promoted.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3>Track Your Campaign</h3>
+          <p>
+            Once your order is processed, you can monitor
+            campaign progress and receive a report.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- =========================
+       TRUST
+  ========================= -->
+  <section id="trust" class="trust">
+    <div class="container">
+      <div class="section-title">
+        <h2>Built for Creators</h2>
+        <p style="color:#aaa;">
+          Simple, transparent and focused on legitimate
+          audience growth.
+        </p>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="icon">🔒</div>
+          <h3>Secure Payments</h3>
+          <p>
+            Payments will be processed securely through
+            our payment provider.
+          </p>
+        </div>
+        <div class="trust-card">
+          <div class="icon">🔑</div>
+          <h3>No TikTok Password</h3>
+          <p>
+            We never need your TikTok password to submit
+            a promotion campaign.
+          </p>
+        </div>
+        <div class="trust-card">
+          <div class="icon">📊</div>
+          <h3>Campaign Reports</h3>
+          <p>
+            Track campaign performance and understand
+            how your promotion performed.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- =========================
+       ORDER MODAL
+  ========================= -->
+  <div class="modal" id="orderModal">
+    <div class="modal-box">
+      <button class="close" onclick="closeOrder()">
+        ×
+      </button>
+      <h2>Start Your Campaign</h2>
+      <p style="color:#666;font-size:14px;">
+        Enter your details below.
+      </p>
+      <div class="selected-package">
+        <strong id="selectedPackage">
+          Package
+        </strong>
+        <div id="selectedPrice"
+             style="margin-top:5px;font-weight:bold;">
+          GH₵0
+        </div>
+      </div>
+      <div class="notice">
+        For security, never enter your TikTok password.
+        We only need your public TikTok username or content URL.
+      </div>
+      <form onsubmit="submitOrder(event)">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input
+            type="text"
+            id="customerName"
+            placeholder="Enter your name"
+            required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input
+            type="email"
+            id="customerEmail"
+            placeholder="you@example.com"
+            required>
+        </div>
+        <div class="form-group">
+          <label>TikTok Username or Video URL</label>
+          <input
+            type="text"
+            id="tiktokTarget"
+            placeholder="@username or video URL"
+            required>
+        </div>
+        <button class="continue-btn" type="submit">
+          Continue to Payment
+        </button>
+      </form>
+    </div>
+  </div>
+  <!-- =========================
+       FOOTER
+  ========================= -->
+  <footer>
+    <p>
+      © <span id="year"></span>
+      <strong>TokBoost GH</strong>.
+      All rights reserved.
+    </p>
+    <p style="margin-top:8px;">
+      TikTok is a trademark of its respective owner.
+      This website is not affiliated with TikTok.
+    </p>
+  </footer>
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+  <script>
+    let selectedPackageName = "";
+    let selectedPackagePrice = 0;
+    function openOrder(packageName, price) {
+      selectedPackageName = packageName;
+      selectedPackagePrice = price;
+      document.getElementById("selectedPackage").textContent =
+        packageName;
+      document.getElementById("selectedPrice").textContent =
+        "GH₵" + price;
+      document.getElementById("orderModal")
+        .classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function closeOrder() {
+      document.getElementById("orderModal")
+        .classList.remove("active");
+      document.body.style.overflow = "";
+    }
+    function openCustomOrder() {
+      alert(
+        "Custom campaigns will be available soon. " +
+        "For now, please contact us directly."
+      );
+    }
+    function submitOrder(event) {
+      event.preventDefault();
+      const name =
+        document.getElementById("customerName").value.trim();
+      const email =
+        document.getElementById("customerEmail").value.trim();
+      const target =
+        document.getElementById("tiktokTarget").value.trim();
+      if (!name || !email || !target) {
+        alert("Please complete all fields.");
+        return;
+      }
+      /*
+        PAYMENT WILL BE CONNECTED IN VERSION 2.
+        IMPORTANT:
+        Do not put a Paystack secret key in this HTML file.
+        The next version will send the order to a secure
+        Netlify Function and initialize Paystack from there.
+      */
+      alert(
+        "Order information received!\\n\\n" +
+        "Package: " + selectedPackageName + "\\n" +
+        "Amount: GH₵" + selectedPackagePrice + "\\n" +
+        "Email: " + email + "\\n\\n" +
+        "Paystack checkout will be connected in Version 2."
+      );
+      closeOrder();
+    }
+    document.getElementById("orderModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeOrder();
+        }
+      });
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+  </script>
+</body>
+</html>
