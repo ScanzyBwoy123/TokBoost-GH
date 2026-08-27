@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
 
   <title>TokBoost GH — Admin</title>
 
@@ -14,171 +15,234 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: #f4f5f7;
-      color: #111;
+      background: #f4f6f8;
+      color: #17202a;
     }
 
-    header {
-      background: #000;
-      color: #fff;
-      padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-    }
-
-    header strong {
-      font-size: 20px;
-    }
-
-    header span {
-      color: #ff2d55;
-    }
-
-    .logout {
-      border: 1px solid #555;
-      background: transparent;
-      color: #fff;
-      padding: 9px 14px;
-      border-radius: 9px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 25px 16px 60px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.06);
-    }
-
-    h1,
-    h2 {
-      margin-top: 0;
-    }
-
-    .login {
-      max-width: 420px;
-      margin: 70px auto;
-    }
-
+    button,
     input,
     select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 15px;
-      outline: none;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #111;
-    }
-
-    button {
-      border: none;
-      background: #111;
-      color: #fff;
-      padding: 12px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 800;
-    }
-
-    button:hover {
-      background: #333;
-    }
-
-    .login button {
-      width: 100%;
-      margin-top: 12px;
-    }
-
-    .error {
-      background: #fff0f0;
-      border: 1px solid #efb4b4;
-      color: #991b1b;
-      padding: 13px;
-      border-radius: 10px;
-      margin-top: 15px;
-      line-height: 1.5;
-    }
-
-    .success {
-      background: #effff4;
-      border: 1px solid #b8e7c8;
-      color: #176b32;
-      padding: 13px;
-      border-radius: 10px;
-      margin-top: 15px;
+      font: inherit;
     }
 
     .hidden {
       display: none !important;
     }
 
+    /* LOGIN */
+
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #111827, #1f2937);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .logo p {
+      margin: 8px 0 0;
+      color: #6b7280;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #111827;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .15s;
+    }
+
+    .btn:hover {
+      opacity: .9;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: #111827;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .error {
+      margin-top: 14px;
+      padding: 11px 13px;
+      border-radius: 9px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 14px;
+    }
+
+    /* DASHBOARD */
+
+    #dashboard {
+      min-height: 100vh;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 16px 22px;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .header-title h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .header-title p {
+      margin: 4px 0 0;
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: auto;
+      padding: 22px;
+    }
+
+    /* STATS */
+
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .stat {
-      background: #fff;
+      background: white;
+      border-radius: 14px;
       padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
     }
 
-    .stat small {
-      color: #777;
-      display: block;
-      margin-bottom: 7px;
+    .stat-title {
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 8px;
     }
 
-    .stat strong {
-      font-size: 26px;
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
     }
+
+    /* TOOLBAR */
 
     .toolbar {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 18px;
       display: grid;
-      grid-template-columns: 1fr 180px auto;
+      grid-template-columns: 1fr 180px 180px auto;
       gap: 10px;
-      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    /* TABLE */
+
+    .table-card {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .table-header {
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      font-weight: 800;
     }
 
     .table-wrap {
+      width: 100%;
       overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 850px;
+      min-width: 950px;
     }
 
     th,
     td {
-      padding: 13px 10px;
-      border-bottom: 1px solid #eee;
       text-align: left;
+      padding: 13px 15px;
+      border-bottom: 1px solid #eef0f2;
       vertical-align: top;
     }
 
     th {
-      font-size: 13px;
-      color: #666;
+      background: #f8fafc;
+      font-size: 12px;
+      color: #64748b;
       text-transform: uppercase;
     }
 
@@ -186,98 +250,126 @@
       font-size: 14px;
     }
 
+    .reference {
+      font-family: monospace;
+      font-size: 12px;
+      word-break: break-all;
+    }
+
+    .target {
+      max-width: 220px;
+      word-break: break-word;
+    }
+
     .status {
       display: inline-block;
       padding: 6px 9px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
+      text-transform: uppercase;
     }
 
-    .processing {
-      background: #fff5cc;
-      color: #725900;
+    .status-processing {
+      background: #fef3c7;
+      color: #92400e;
     }
 
-    .progress {
-      background: #e8f1ff;
-      color: #174b8f;
+    .status-promotion {
+      background: #dbeafe;
+      color: #1e40af;
     }
 
-    .completed {
-      background: #e8fff0;
-      color: #16723a;
+    .status-completed {
+      background: #dcfce7;
+      color: #166534;
     }
 
-    .cancelled {
-      background: #ffe9e9;
-      color: #9b1c1c;
+    .status-cancelled {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
-    .muted {
-      color: #777;
-    }
-
-    .action-select {
-      min-width: 150px;
+    .status-select {
+      width: auto;
+      min-width: 125px;
       padding: 8px;
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 40px 20px;
+      text-align: center;
+      color: #6b7280;
     }
 
     .loading {
+      padding: 30px;
       text-align: center;
-      padding: 35px;
-      color: #777;
+      color: #6b7280;
     }
 
-    .mobile-note {
-      display: none;
-      color: #777;
-      font-size: 13px;
-      margin-bottom: 10px;
+    .message {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      max-width: 360px;
+      padding: 13px 16px;
+      border-radius: 10px;
+      background: #111827;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+      z-index: 999;
     }
 
-    @media (max-width: 800px) {
+    .message.success {
+      background: #166534;
+    }
+
+    .message.error {
+      background: #991b1b;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
       .stats {
         grid-template-columns: repeat(2, 1fr);
       }
 
       .toolbar {
-        grid-template-columns: 1fr;
-      }
-
-      .mobile-note {
-        display: block;
+        grid-template-columns: 1fr 1fr;
       }
     }
 
-    @media (max-width: 500px) {
-      header {
-        padding: 15px;
+    @media (max-width: 600px) {
+      main {
+        padding: 14px;
       }
 
-      header strong {
-        font-size: 17px;
-      }
-
-      .container {
-        padding: 15px 10px 40px;
-      }
-
-      .card {
-        padding: 17px;
+      .header-inner {
+        align-items: flex-start;
+        flex-direction: column;
       }
 
       .stats {
         grid-template-columns: 1fr 1fr;
-        gap: 9px;
       }
 
       .stat {
         padding: 15px;
       }
 
-      .stat strong {
-        font-size: 21px;
+      .stat-value {
+        font-size: 22px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .login-card {
+        padding: 24px;
       }
     }
   </style>
@@ -285,851 +377,1512 @@
 
 <body>
 
-<header id="adminHeader" class="hidden">
-  <strong>
-    Tok<span>Boost</span> GH — Admin
-  </strong>
+  <!-- ======================================================
+       LOGIN SCREEN
+  ======================================================= -->
 
-  <button class="logout" onclick="logout()">
-    Logout
-  </button>
-</header>
+  <section id="loginScreen">
 
-<main class="container">
+    <div class="login-card">
 
-  <!-- LOGIN -->
-  <section id="loginSection" class="card login">
+      <div class="logo">
+        <h1>TokBoost GH</h1>
+        <p>Secure Administrator Login</p>
+      </div>
 
-    <h1>Admin Login</h1>
+      <form id="loginForm">
 
-    <p class="muted">
-      Authorized TokBoost GH administrators only.
-    </p>
+        <div class="field">
+          <label for="adminPassword">
+            Administrator Password
+          </label>
 
-    <input
-      id="password"
-      type="password"
-      placeholder="Admin password"
-      autocomplete="current-password"
-    >
+          <input
+            id="adminPassword"
+            type="password"
+            autocomplete="current-password"
+            required
+            placeholder="Enter admin password"
+          >
+        </div>
 
-    <button onclick="login()">
-      Sign In
-    </button>
+        <button
+          class="btn btn-primary"
+          id="loginButton"
+          type="submit"
+        >
+          Sign In
+        </button>
 
-    <div id="loginError" class="error hidden"></div>
+      </form>
+
+      <div
+        id="loginError"
+        class="error hidden"
+      ></div>
+
+    </div>
 
   </section>
 
 
-  <!-- DASHBOARD -->
-  <section id="dashboard" class="hidden">
+  <!-- ======================================================
+       ADMIN DASHBOARD
+  ======================================================= -->
 
-    <div class="stats">
+  <section
+    id="dashboard"
+    class="hidden"
+  >
 
-      <div class="stat">
-        <small>Total Orders</small>
-        <strong id="totalOrders">0</strong>
-      </div>
+    <header>
 
-      <div class="stat">
-        <small>Processing</small>
-        <strong id="processingOrders">0</strong>
-      </div>
+      <div class="header-inner">
 
-      <div class="stat">
-        <small>Promotion In Progress</small>
-        <strong id="progressOrders">0</strong>
-      </div>
+        <div class="header-title">
+          <h1>TokBoost GH Admin</h1>
+          <p>Order Management Dashboard</p>
+        </div>
 
-      <div class="stat">
-        <small>Completed</small>
-        <strong id="completedOrders">0</strong>
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <h2>Order Management</h2>
-
-      <p class="muted">
-        Search and update TokBoost GH customer orders.
-      </p>
-
-      <div class="toolbar">
-
-        <input
-          id="search"
-          type="search"
-          placeholder="Search reference, email or TikTok target..."
-          oninput="renderOrders()"
+        <button
+          id="logoutButton"
+          class="btn btn-danger"
+          type="button"
         >
-
-        <select
-          id="statusFilter"
-          onchange="renderOrders()"
-        >
-          <option value="all">All statuses</option>
-          <option value="processing">Processing</option>
-          <option value="promotion">Promotion In Progress</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-
-        <button onclick="loadOrders()">
-          Refresh
+          Logout
         </button>
 
       </div>
 
-      <div id="message"></div>
+    </header>
 
-      <div class="mobile-note">
-        Swipe horizontally to view the complete order table.
-      </div>
 
-      <div class="table-wrap">
+    <main>
 
-        <table>
+      <!-- STATS -->
 
-          <thead>
-            <tr>
-              <th>Reference</th>
-              <th>Customer</th>
-              <th>Package</th>
-              <th>Amount</th>
-              <th>TikTok Target</th>
-              <th>Status</th>
-              <th>Created</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+      <section class="stats">
 
-          <tbody id="ordersBody">
-            <tr>
-              <td colspan="8" class="loading">
-                Loading orders...
-              </td>
-            </tr>
-          </tbody>
+        <div class="stat">
+          <div class="stat-title">
+            Total Orders
+          </div>
 
-        </table>
+          <div
+            class="stat-value"
+            id="totalOrders"
+          >
+            0
+          </div>
+        </div>
 
-      </div>
 
-    </div>
+        <div class="stat">
+          <div class="stat-title">
+            Processing
+          </div>
+
+          <div
+            class="stat-value"
+            id="processingOrders"
+          >
+            0
+          </div>
+        </div>
+
+
+        <div class="stat">
+          <div class="stat-title">
+            Completed
+          </div>
+
+          <div
+            class="stat-value"
+            id="completedOrders"
+          >
+            0
+          </div>
+        </div>
+
+
+        <div class="stat">
+          <div class="stat-title">
+            Cancelled
+          </div>
+
+          <div
+            class="stat-value"
+            id="cancelledOrders"
+          >
+            0
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- TOOLBAR -->
+
+      <section class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search name, email, reference or TikTok..."
+        >
+
+        <select id="statusFilter">
+          <option value="all">
+            All statuses
+          </option>
+
+          <option value="processing">
+            Processing
+          </option>
+
+          <option value="promotion">
+            Promotion
+          </option>
+
+          <option value="completed">
+            Completed
+          </option>
+
+          <option value="cancelled">
+            Cancelled
+          </option>
+        </select>
+
+
+        <select id="packageFilter">
+          <option value="all">
+            All packages
+          </option>
+        </select>
+
+
+        <button
+          id="refreshButton"
+          class="btn btn-secondary"
+          type="button"
+        >
+          Refresh
+        </button>
+
+      </section>
+
+
+      <!-- ORDERS -->
+
+      <section class="table-card">
+
+        <div class="table-header">
+          Customer Orders
+        </div>
+
+        <div
+          id="loading"
+          class="loading hidden"
+        >
+          Loading orders...
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Package</th>
+                <th>Amount</th>
+                <th>TikTok Target</th>
+                <th>Reference</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody id="ordersBody"></tbody>
+
+          </table>
+
+        </div>
+
+        <div
+          id="emptyState"
+          class="empty hidden"
+        >
+          No orders found.
+        </div>
+
+      </section>
+
+    </main>
 
   </section>
 
-</main>
+
+  <div
+    id="message"
+    class="message hidden"
+  ></div>
 
 
-<script>
-  "use strict";
+  <script>
+    "use strict";
 
-  const TOKEN_KEY = "tokboost_admin_token";
+    /*
+     * IMPORTANT
+     *
+     * This page never receives or stores:
+     *
+     * SUPABASE_SERVICE_ROLE_KEY
+     * PAYSTACK_SECRET_KEY
+     *
+     * Authentication happens through:
+     *
+     * /api/admin-orders
+     */
 
-  let orders = [];
-
-
-  function escapeHTML(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-
-  function getToken() {
-    return sessionStorage.getItem(TOKEN_KEY) || "";
-  }
+    const API_URL =
+      "/api/admin-orders";
 
 
-  function showDashboard() {
-    document
-      .getElementById("loginSection")
-      .classList.add("hidden");
-
-    document
-      .getElementById("dashboard")
-      .classList.remove("hidden");
-
-    document
-      .getElementById("adminHeader")
-      .classList.remove("hidden");
-  }
+    const TOKEN_KEY =
+      "tokboost_admin_token";
 
 
-  function showLogin() {
-    document
-      .getElementById("loginSection")
-      .classList.remove("hidden");
-
-    document
-      .getElementById("dashboard")
-      .classList.add("hidden");
-
-    document
-      .getElementById("adminHeader")
-      .classList.add("hidden");
-  }
+    let orders = [];
 
 
-  async function login() {
+    /* ========================================================
+       ELEMENTS
+    ======================================================== */
 
-    const password =
-      document
-        .getElementById("password")
-        .value
-        .trim();
+    const loginScreen =
+      document.getElementById(
+        "loginScreen"
+      );
 
-    const error =
-      document.getElementById("loginError");
+    const dashboard =
+      document.getElementById(
+        "dashboard"
+      );
 
-    error.classList.add("hidden");
+    const loginForm =
+      document.getElementById(
+        "loginForm"
+      );
 
-    if (!password) {
-      error.textContent =
-        "Please enter the admin password.";
+    const adminPassword =
+      document.getElementById(
+        "adminPassword"
+      );
 
-      error.classList.remove("hidden");
+    const loginButton =
+      document.getElementById(
+        "loginButton"
+      );
 
-      return;
-    }
+    const loginError =
+      document.getElementById(
+        "loginError"
+      );
 
-    try {
+    const logoutButton =
+      document.getElementById(
+        "logoutButton"
+      );
 
-      const response =
-        await fetch(
-          "/.netlify/functions/admin-orders",
-          {
-            method: "POST",
+    const refreshButton =
+      document.getElementById(
+        "refreshButton"
+      );
 
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
 
-            body: JSON.stringify({
-              action: "login",
-              password: password
-            })
-          }
-        );
+    const statusFilter =
+      document.getElementById(
+        "statusFilter"
+      );
 
-      const data =
-        await response.json();
+    const packageFilter =
+      document.getElementById(
+        "packageFilter"
+      );
 
-      if (
-        !response.ok ||
-        !data.status ||
-        !data.token
-      ) {
-        throw new Error(
-          data.error ||
-          "Invalid administrator credentials."
+    const ordersBody =
+      document.getElementById(
+        "ordersBody"
+      );
+
+    const emptyState =
+      document.getElementById(
+        "emptyState"
+      );
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+    const message =
+      document.getElementById(
+        "message"
+      );
+
+
+    /* ========================================================
+       MESSAGE
+    ======================================================== */
+
+    function showMessage(
+      text,
+      type = ""
+    ) {
+
+      message.textContent =
+        text;
+
+      message.className =
+        "message";
+
+      if (type) {
+        message.classList.add(
+          type
         );
       }
+
+      setTimeout(() => {
+        message.classList.add(
+          "hidden"
+        );
+      }, 3500);
+    }
+
+
+    /* ========================================================
+       LOGIN ERROR
+    ======================================================== */
+
+    function showLoginError(
+      text
+    ) {
+
+      loginError.textContent =
+        text;
+
+      loginError.classList.remove(
+        "hidden"
+      );
+    }
+
+
+    function clearLoginError() {
+
+      loginError.textContent =
+        "";
+
+      loginError.classList.add(
+        "hidden"
+      );
+    }
+
+
+    /* ========================================================
+       TOKEN
+    ======================================================== */
+
+    function getToken() {
+
+      return sessionStorage.getItem(
+        TOKEN_KEY
+      ) || "";
+    }
+
+
+    function saveToken(token) {
 
       sessionStorage.setItem(
         TOKEN_KEY,
-        data.token
-      );
-
-      document
-        .getElementById("password")
-        .value = "";
-
-      showDashboard();
-
-      await loadOrders();
-
-    } catch (err) {
-
-      error.textContent =
-        err.message ||
-        "Login failed.";
-
-      error.classList.remove("hidden");
-    }
-  }
-
-
-  function logout() {
-
-    sessionStorage.removeItem(
-      TOKEN_KEY
-    );
-
-    orders = [];
-
-    showLogin();
-  }
-
-
-  async function apiRequest(
-    method,
-    body = null
-  ) {
-
-    const token = getToken();
-
-    if (!token) {
-      throw new Error(
-        "Your admin session has expired."
+        token
       );
     }
 
-    const options = {
-      method,
-      headers: {
-        "Authorization":
-          `Bearer ${token}`,
-        "Content-Type":
-          "application/json"
-      }
-    };
 
-    if (body) {
-      options.body =
-        JSON.stringify(body);
-    }
+    function clearToken() {
 
-    const response =
-      await fetch(
-        "/.netlify/functions/admin-orders",
-        options
-      );
-
-    const data =
-      await response.json();
-
-    if (response.status === 401) {
-      logout();
-
-      throw new Error(
-        "Your admin session has expired. Please sign in again."
+      sessionStorage.removeItem(
+        TOKEN_KEY
       );
     }
 
-    if (!response.ok || !data.status) {
-      throw new Error(
-        data.error ||
-        "Request failed."
-      );
-    }
 
-    return data;
-  }
+    /* ========================================================
+       API REQUEST
+    ======================================================== */
 
-
-  async function loadOrders() {
-
-    const body =
-      document.getElementById(
-        "ordersBody"
-      );
-
-    body.innerHTML = `
-      <tr>
-        <td colspan="8" class="loading">
-          Loading orders...
-        </td>
-      </tr>
-    `;
-
-    try {
-
-      const data =
-        await apiRequest(
-          "GET"
-        );
-
-      orders =
-        Array.isArray(data.orders)
-          ? data.orders
-          : [];
-
-      updateStats();
-
-      renderOrders();
-
-    } catch (err) {
-
-      body.innerHTML = `
-        <tr>
-          <td colspan="8">
-            <div class="error">
-              ${escapeHTML(
-                err.message
-              )}
-            </div>
-          </td>
-        </tr>
-      `;
-    }
-  }
-
-
-  function updateStats() {
-
-    document.getElementById(
-      "totalOrders"
-    ).textContent =
-      orders.length;
-
-    document.getElementById(
-      "processingOrders"
-    ).textContent =
-      orders.filter(
-        order =>
-          String(order.status)
-            .toLowerCase() ===
-          "processing"
-      ).length;
-
-    document.getElementById(
-      "progressOrders"
-    ).textContent =
-      orders.filter(
-        order =>
-          String(order.status)
-            .toLowerCase() ===
-          "promotion"
-      ).length;
-
-    document.getElementById(
-      "completedOrders"
-    ).textContent =
-      orders.filter(
-        order =>
-          String(order.status)
-            .toLowerCase() ===
-          "completed"
-      ).length;
-  }
-
-
-  function statusClass(status) {
-
-    const value =
-      String(status || "")
-        .toLowerCase();
-
-    if (value === "completed") {
-      return "completed";
-    }
-
-    if (value === "promotion") {
-      return "progress";
-    }
-
-    if (value === "cancelled") {
-      return "cancelled";
-    }
-
-    return "processing";
-  }
-
-
-  function statusLabel(status) {
-
-    switch (
-      String(status || "")
-        .toLowerCase()
+    async function apiRequest(
+      url,
+      options = {}
     ) {
 
-      case "promotion":
-        return "Promotion In Progress";
+      const token =
+        getToken();
 
-      case "completed":
-        return "Completed";
+      const headers = {
+        "Content-Type":
+          "application/json",
 
-      case "cancelled":
-        return "Cancelled";
+        ...(options.headers || {})
+      };
 
-      default:
-        return "Processing";
+
+      if (token) {
+
+        headers.Authorization =
+          `Bearer ${token}`;
+      }
+
+
+      const response =
+        await fetch(
+          url,
+          {
+            ...options,
+            headers
+          }
+        );
+
+
+      let data = {};
+
+      try {
+
+        data =
+          await response.json();
+
+      } catch {
+
+        data = {
+          status: false,
+          error:
+            "Invalid server response."
+        };
+      }
+
+
+      if (
+        response.status === 401
+      ) {
+
+        clearToken();
+
+        showLogin();
+
+        throw new Error(
+          data.error ||
+          "Your administrator session has expired."
+        );
+      }
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error ||
+          "Request failed."
+        );
+      }
+
+
+      return data;
     }
-  }
 
 
-  function renderOrders() {
+    /* ========================================================
+       LOGIN
+    ======================================================== */
 
-    const body =
-      document.getElementById(
-        "ordersBody"
+    async function login(
+      password
+    ) {
+
+      loginButton.disabled =
+        true;
+
+      loginButton.textContent =
+        "Signing in...";
+
+      clearLoginError();
+
+
+      try {
+
+        const data =
+          await apiRequest(
+            API_URL,
+            {
+              method: "POST",
+
+              body:
+                JSON.stringify({
+                  action: "login",
+                  password: password
+                })
+            }
+          );
+
+
+        if (
+          !data.status ||
+          !data.token
+        ) {
+
+          throw new Error(
+            "Login failed."
+          );
+        }
+
+
+        saveToken(
+          data.token
+        );
+
+        showDashboard();
+
+        await loadOrders();
+
+
+      } catch (error) {
+
+        showLoginError(
+          error.message ||
+          "Invalid administrator credentials."
+        );
+
+      } finally {
+
+        loginButton.disabled =
+          false;
+
+        loginButton.textContent =
+          "Sign In";
+      }
+    }
+
+
+    /* ========================================================
+       SHOW LOGIN
+    ======================================================== */
+
+    function showLogin() {
+
+      loginScreen.classList.remove(
+        "hidden"
       );
 
-    const search =
-      document
-        .getElementById("search")
-        .value
-        .trim()
-        .toLowerCase();
+      dashboard.classList.add(
+        "hidden"
+      );
 
-    const filter =
-      document
-        .getElementById(
-          "statusFilter"
-        )
-        .value;
-
-    const filtered =
-      orders.filter(order => {
-
-        const matchesSearch =
-          !search ||
-          String(
-            order.reference || ""
-          )
-            .toLowerCase()
-            .includes(search) ||
-          String(
-            order.email || ""
-          )
-            .toLowerCase()
-            .includes(search) ||
-          String(
-            order.tiktok_target || ""
-          )
-            .toLowerCase()
-            .includes(search);
-
-        const matchesStatus =
-          filter === "all" ||
-          String(
-            order.status || ""
-          ).toLowerCase() ===
-          filter;
-
-        return (
-          matchesSearch &&
-          matchesStatus
-        );
-      });
-
-
-    if (!filtered.length) {
-
-      body.innerHTML = `
-        <tr>
-          <td
-            colspan="8"
-            class="loading"
-          >
-            No orders found.
-          </td>
-        </tr>
-      `;
-
-      return;
+      adminPassword.value =
+        "";
     }
 
 
-    body.innerHTML =
-      filtered.map(order => {
+    /* ========================================================
+       SHOW DASHBOARD
+    ======================================================== */
 
-        const id =
-          escapeHTML(order.id);
+    function showDashboard() {
 
-        const reference =
-          escapeHTML(
-            order.reference
+      loginScreen.classList.add(
+        "hidden"
+      );
+
+      dashboard.classList.remove(
+        "hidden"
+      );
+    }
+
+
+    /* ========================================================
+       LOAD ORDERS
+    ======================================================== */
+
+    async function loadOrders() {
+
+      loading.classList.remove(
+        "hidden"
+      );
+
+      ordersBody.innerHTML =
+        "";
+
+      emptyState.classList.add(
+        "hidden"
+      );
+
+
+      try {
+
+        const data =
+          await apiRequest(
+            API_URL,
+            {
+              method: "GET"
+            }
           );
 
-        const customer =
-          escapeHTML(
-            order.customer_name ||
-            "—"
+
+        if (
+          !data.status ||
+          !Array.isArray(
+            data.orders
+          )
+        ) {
+
+          throw new Error(
+            "Unable to load orders."
           );
+        }
 
-        const email =
-          escapeHTML(
-            order.email ||
-            "—"
-          );
 
-        const packageName =
-          escapeHTML(
-            order.package_name ||
-            "—"
-          );
+        orders =
+          data.orders;
 
-        const amount =
-          Number(
-            order.amount || 0
-          ).toFixed(2);
 
-        const target =
-          escapeHTML(
-            order.tiktok_target ||
-            "—"
-          );
+        updateStats();
 
-        const status =
-          String(
-            order.status ||
+        populatePackageFilter();
+
+        renderOrders();
+
+
+      } catch (error) {
+
+        showMessage(
+          error.message ||
+          "Unable to load orders.",
+          "error"
+        );
+
+      } finally {
+
+        loading.classList.add(
+          "hidden"
+        );
+      }
+    }
+
+
+    /* ========================================================
+       UPDATE STATS
+    ======================================================== */
+
+    function updateStats() {
+
+      const total =
+        orders.length;
+
+
+      const processing =
+        orders.filter(
+          order =>
+            String(
+              order.status || ""
+            ).toLowerCase() ===
             "processing"
-          ).toLowerCase();
-
-        const created =
-          order.created_at
-            ? new Date(
-                order.created_at
-              ).toLocaleString()
-            : "—";
+        ).length;
 
 
-        return `
-          <tr>
+      const completed =
+        orders.filter(
+          order =>
+            String(
+              order.status || ""
+            ).toLowerCase() ===
+            "completed"
+        ).length;
+
+
+      const cancelled =
+        orders.filter(
+          order =>
+            String(
+              order.status || ""
+            ).toLowerCase() ===
+            "cancelled"
+        ).length;
+
+
+      document.getElementById(
+        "totalOrders"
+      ).textContent =
+        total;
+
+
+      document.getElementById(
+        "processingOrders"
+      ).textContent =
+        processing;
+
+
+      document.getElementById(
+        "completedOrders"
+      ).textContent =
+        completed;
+
+
+      document.getElementById(
+        "cancelledOrders"
+      ).textContent =
+        cancelled;
+    }
+
+
+    /* ========================================================
+       PACKAGE FILTER
+    ======================================================== */
+
+    function populatePackageFilter() {
+
+      const current =
+        packageFilter.value;
+
+
+      const packages =
+        [
+          ...new Set(
+            orders
+              .map(
+                order =>
+                  String(
+                    order.package_name ||
+                    ""
+                  ).trim()
+              )
+              .filter(Boolean)
+          )
+        ]
+        .sort();
+
+
+      packageFilter.innerHTML =
+        `<option value="all">All packages</option>`;
+
+
+      packages.forEach(
+        packageName => {
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+          option.value =
+            packageName;
+
+          option.textContent =
+            packageName;
+
+          packageFilter.appendChild(
+            option
+          );
+        }
+      );
+
+
+      if (
+        packages.includes(current)
+      ) {
+
+        packageFilter.value =
+          current;
+      }
+    }
+
+
+    /* ========================================================
+       FILTER ORDERS
+    ======================================================== */
+
+    function getFilteredOrders() {
+
+      const search =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+
+      const selectedStatus =
+        statusFilter.value;
+
+
+      const selectedPackage =
+        packageFilter.value;
+
+
+      return orders.filter(
+        order => {
+
+          const searchable = [
+            order.customer_name,
+            order.email,
+            order.reference,
+            order.tiktok_target,
+            order.package_name
+          ]
+            .map(
+              value =>
+                String(
+                  value || ""
+                ).toLowerCase()
+            )
+            .join(" ");
+
+
+          const matchesSearch =
+            !search ||
+            searchable.includes(
+              search
+            );
+
+
+          const orderStatus =
+            String(
+              order.status || ""
+            ).toLowerCase();
+
+
+          const matchesStatus =
+            selectedStatus ===
+              "all" ||
+            orderStatus ===
+              selectedStatus;
+
+
+          const matchesPackage =
+            selectedPackage ===
+              "all" ||
+            String(
+              order.package_name ||
+              ""
+            ) ===
+              selectedPackage;
+
+
+          return (
+            matchesSearch &&
+            matchesStatus &&
+            matchesPackage
+          );
+        }
+      );
+    }
+
+
+    /* ========================================================
+       ESCAPE HTML
+    ======================================================== */
+
+    function escapeHTML(
+      value
+    ) {
+
+      return String(
+        value ?? ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+    }
+
+
+    /* ========================================================
+       FORMAT DATE
+    ======================================================== */
+
+    function formatDate(
+      value
+    ) {
+
+      if (!value) {
+        return "—";
+      }
+
+
+      const date =
+        new Date(value);
+
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return escapeHTML(
+          value
+        );
+      }
+
+
+      return date.toLocaleString();
+    }
+
+
+    /* ========================================================
+       FORMAT AMOUNT
+    ======================================================== */
+
+    function formatAmount(
+      value
+    ) {
+
+      const amount =
+        Number(value);
+
+
+      if (
+        !Number.isFinite(
+          amount
+        )
+      ) {
+
+        return "GHS —";
+      }
+
+
+      return `GHS ${amount.toFixed(2)}`;
+    }
+
+
+    /* ========================================================
+       STATUS CLASS
+    ======================================================== */
+
+    function statusClass(
+      status
+    ) {
+
+      const clean =
+        String(
+          status || ""
+        )
+          .toLowerCase();
+
+
+      if (
+        [
+          "processing",
+          "promotion",
+          "completed",
+          "cancelled"
+        ].includes(clean)
+      ) {
+
+        return `status-${clean}`;
+      }
+
+
+      return "status-processing";
+    }
+
+
+    /* ========================================================
+       RENDER ORDERS
+    ======================================================== */
+
+    function renderOrders() {
+
+      const filtered =
+        getFilteredOrders();
+
+
+      ordersBody.innerHTML =
+        "";
+
+
+      if (
+        filtered.length === 0
+      ) {
+
+        emptyState.classList.remove(
+          "hidden"
+        );
+
+        return;
+      }
+
+
+      emptyState.classList.add(
+        "hidden"
+      );
+
+
+      filtered.forEach(
+        order => {
+
+          const row =
+            document.createElement(
+              "tr"
+            );
+
+
+          const status =
+            String(
+              order.status ||
+              "processing"
+            ).toLowerCase();
+
+
+          row.innerHTML = `
+            <td>
+              ${escapeHTML(
+                formatDate(
+                  order.created_at
+                )
+              )}
+            </td>
 
             <td>
               <strong>
-                ${reference}
+                ${escapeHTML(
+                  order.customer_name ||
+                  "—"
+                )}
               </strong>
             </td>
 
             <td>
-              ${customer}
-              <br>
-              <span class="muted">
-                ${email}
-              </span>
+              ${escapeHTML(
+                order.email ||
+                "—"
+              )}
             </td>
 
             <td>
-              ${packageName}
+              ${escapeHTML(
+                order.package_name ||
+                "—"
+              )}
             </td>
 
             <td>
-              GH₵${amount}
-            </td>
-
-            <td>
-              <span
-                style="
-                  word-break:break-word;
-                  max-width:220px;
-                  display:block;
-                "
-              >
-                ${target}
-              </span>
-            </td>
-
-            <td>
-              <span
-                class="status ${statusClass(
-                  status
-                )}"
-              >
+              <strong>
                 ${escapeHTML(
-                  statusLabel(status)
+                  formatAmount(
+                    order.amount
+                  )
                 )}
-              </span>
+              </strong>
             </td>
 
             <td>
-              ${escapeHTML(created)}
+              <div class="target">
+                ${escapeHTML(
+                  order.tiktok_target ||
+                  "—"
+                )}
+              </div>
             </td>
 
             <td>
+              <div class="reference">
+                ${escapeHTML(
+                  order.reference ||
+                  "—"
+                )}
+              </div>
+            </td>
 
+            <td>
               <select
-                class="action-select"
-                data-id="${id}"
-                onchange="changeStatus(
-                  this,
-                  '${id}'
-                )"
+                class="status-select"
+                data-order-id="${escapeHTML(
+                  order.id
+                )}"
               >
 
                 <option
                   value="processing"
-                  ${status === "processing"
-                    ? "selected"
-                    : ""}
+                  ${
+                    status ===
+                    "processing"
+                      ? "selected"
+                      : ""
+                  }
                 >
                   Processing
                 </option>
 
                 <option
                   value="promotion"
-                  ${status === "promotion"
-                    ? "selected"
-                    : ""}
+                  ${
+                    status ===
+                    "promotion"
+                      ? "selected"
+                      : ""
+                  }
                 >
-                  Promotion In Progress
+                  Promotion
                 </option>
 
                 <option
                   value="completed"
-                  ${status === "completed"
-                    ? "selected"
-                    : ""}
+                  ${
+                    status ===
+                    "completed"
+                      ? "selected"
+                      : ""
+                  }
                 >
                   Completed
                 </option>
 
                 <option
                   value="cancelled"
-                  ${status === "cancelled"
-                    ? "selected"
-                    : ""}
+                  ${
+                    status ===
+                    "cancelled"
+                      ? "selected"
+                      : ""
+                  }
                 >
                   Cancelled
                 </option>
 
               </select>
 
+              <div
+                class="status ${statusClass(
+                  status
+                )}"
+                style="margin-top:6px"
+              >
+                ${escapeHTML(
+                  status
+                )}
+              </div>
+
             </td>
-
-          </tr>
-        `;
-
-      }).join("");
-  }
+          `;
 
 
-  async function changeStatus(
-    select,
-    orderId
-  ) {
-
-    const newStatus =
-      select.value;
-
-    const previousStatus =
-      orders.find(
-        order =>
-          String(order.id) ===
-          String(orderId)
-      )?.status ||
-      "processing";
-
-    if (
-      !confirm(
-        `Change this order status to "${statusLabel(newStatus)}"?`
-      )
-    ) {
-      select.value =
-        previousStatus;
-
-      return;
+          ordersBody.appendChild(
+            row
+          );
+        }
+      );
     }
 
-    select.disabled = true;
 
-    try {
+    /* ========================================================
+       UPDATE ORDER STATUS
+    ======================================================== */
 
-      const data =
-        await apiRequest(
-          "PATCH",
-          {
-            action:
-              "update_status",
+    async function updateOrderStatus(
+      orderId,
+      newStatus,
+      selectElement
+    ) {
 
-            orderId:
-              orderId,
+      if (!orderId) {
 
-            status:
-              newStatus
-          }
+        showMessage(
+          "Order ID is missing.",
+          "error"
         );
 
-      const updated =
-        data.order;
-
-      const index =
-        orders.findIndex(
-          order =>
-            String(order.id) ===
-            String(orderId)
-        );
-
-      if (index !== -1) {
-        orders[index] =
-          updated;
+        return;
       }
 
-      updateStats();
 
-      renderOrders();
-
-      showMessage(
-        "Order status updated successfully.",
-        "success"
-      );
-
-    } catch (err) {
-
-      select.value =
-        previousStatus;
-
-      showMessage(
-        err.message ||
-        "Unable to update order.",
-        "error"
-      );
-
-    } finally {
-
-      select.disabled = false;
-    }
-  }
+      const previousOrder =
+        orders.find(
+          order =>
+            String(
+              order.id
+            ) ===
+            String(
+              orderId
+            )
+        );
 
 
-  function showMessage(
-    message,
-    type
-  ) {
-
-    const box =
-      document.getElementById(
-        "message"
-      );
-
-    box.className =
-      type === "success"
-        ? "success"
-        : "error";
-
-    box.textContent =
-      message;
-
-    setTimeout(() => {
-      box.className = "";
-      box.textContent = "";
-    }, 5000);
-  }
+      const previousStatus =
+        previousOrder
+          ? previousOrder.status
+          : "processing";
 
 
-  document
-    .getElementById("password")
-    .addEventListener(
-      "keydown",
-      event => {
+      try {
+
+        selectElement.disabled =
+          true;
+
+
+        const data =
+          await apiRequest(
+            API_URL,
+            {
+              method: "POST",
+
+              body:
+                JSON.stringify({
+                  action:
+                    "update_status",
+
+                  orderId:
+                    orderId,
+
+                  status:
+                    newStatus
+                })
+            }
+          );
+
 
         if (
-          event.key === "Enter"
+          !data.status
         ) {
-          login();
+
+          throw new Error(
+            data.error ||
+            "Unable to update order."
+          );
         }
 
+
+        if (previousOrder) {
+
+          previousOrder.status =
+            newStatus;
+        }
+
+
+        updateStats();
+
+        renderOrders();
+
+
+        showMessage(
+          "Order status updated successfully.",
+          "success"
+        );
+
+
+      } catch (error) {
+
+        selectElement.value =
+          previousStatus;
+
+
+        showMessage(
+          error.message ||
+          "Unable to update order.",
+          "error"
+        );
+
+      } finally {
+
+        selectElement.disabled =
+          false;
+      }
+    }
+
+
+    /* ========================================================
+       EVENT: LOGIN
+    ======================================================== */
+
+    loginForm.addEventListener(
+      "submit",
+      event => {
+
+        event.preventDefault();
+
+        const password =
+          adminPassword.value;
+
+        if (!password) {
+
+          showLoginError(
+            "Enter your administrator password."
+          );
+
+          return;
+        }
+
+        login(password);
       }
     );
 
 
-  if (getToken()) {
-    showDashboard();
-    loadOrders();
-  }
-</script>
+    /* ========================================================
+       EVENT: LOGOUT
+    ======================================================== */
+
+    logoutButton.addEventListener(
+      "click",
+      () => {
+
+        clearToken();
+
+        orders = [];
+
+        showLogin();
+
+        showMessage(
+          "You have been logged out."
+        );
+      }
+    );
+
+
+    /* ========================================================
+       EVENT: REFRESH
+    ======================================================== */
+
+    refreshButton.addEventListener(
+      "click",
+      () => {
+
+        loadOrders();
+      }
+    );
+
+
+    /* ========================================================
+       EVENT: SEARCH
+    ======================================================== */
+
+    searchInput.addEventListener(
+      "input",
+      renderOrders
+    );
+
+
+    /* ========================================================
+       EVENT: STATUS FILTER
+    ======================================================== */
+
+    statusFilter.addEventListener(
+      "change",
+      renderOrders
+    );
+
+
+    /* ========================================================
+       EVENT: PACKAGE FILTER
+    ======================================================== */
+
+    packageFilter.addEventListener(
+      "change",
+      renderOrders
+    );
+
+
+    /* ========================================================
+       EVENT: CHANGE ORDER STATUS
+    ======================================================== */
+
+    ordersBody.addEventListener(
+      "change",
+      event => {
+
+        const select =
+          event.target;
+
+
+        if (
+          !select.classList.contains(
+            "status-select"
+          )
+        ) {
+
+          return;
+        }
+
+
+        const orderId =
+          select.dataset.orderId;
+
+
+        const newStatus =
+          select.value;
+
+
+        updateOrderStatus(
+          orderId,
+          newStatus,
+          select
+        );
+      }
+    );
+
+
+    /* ========================================================
+       INITIAL SESSION CHECK
+    ======================================================== */
+
+    async function initialize() {
+
+      const token =
+        getToken();
+
+
+      if (!token) {
+
+        showLogin();
+
+        return;
+      }
+
+
+      showDashboard();
+
+
+      try {
+
+        await loadOrders();
+
+      } catch {
+
+        clearToken();
+
+        showLogin();
+      }
+    }
+
+
+    initialize();
+
+  </script>
 
 </body>
 </html>
