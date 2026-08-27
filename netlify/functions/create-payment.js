@@ -116,7 +116,8 @@ exports.handler = async (event) => {
     // --------------------------------------------------------
 
     const secretKey =
-      process.env.PAYSTACK_SECRET_KEY;
+      const secretKey =
+  process.env.PAYSTACK_SECRET_KEY;
 
     if (!secretKey) {
       console.error(
