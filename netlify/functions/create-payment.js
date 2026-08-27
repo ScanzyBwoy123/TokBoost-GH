@@ -114,14 +114,13 @@ exports.handler = async (event) => {
     // NEVER put this key inside index.html.
     // It must remain in Netlify environment variables.
     // --------------------------------------------------------
-
-    const secretKey =
-      const secretKey =
-  process.env.PAYSTACK_SECRET_KEY;
+const secretKey =
+  process.env.PAYSTACK_API_KEY;
+    
 
     if (!secretKey) {
       console.error(
-        "PAYSTACK_SECRET_KEY is missing."
+        "PAYSTACK_API_KEY is missing."
       );
 
       return {
