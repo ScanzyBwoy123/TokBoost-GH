@@ -79,10 +79,6 @@ exports.handler = async (event) => {
 
     // --------------------------------------------------------
     // 5. SERVER-SIDE PACKAGE PRICES
-    //
-    // IMPORTANT:
-    // The customer cannot choose the price.
-    // The server chooses it from this list.
     // --------------------------------------------------------
 
     const packages = {
@@ -111,12 +107,13 @@ exports.handler = async (event) => {
     // --------------------------------------------------------
     // 6. Get Paystack secret key
     //
-    // NEVER put this key inside index.html.
-    // It must remain in Netlify environment variables.
+    // IMPORTANT:
+    // Keep this key in Netlify environment variables.
+    // NEVER put the secret key in index.html.
     // --------------------------------------------------------
-const secretKey =
-  process.env.PAYSTACK_API_KEY;
-    
+
+    const secretKey =
+      process.env.PAYSTACK_API_KEY;
 
     if (!secretKey) {
       console.error(
@@ -138,6 +135,7 @@ const secretKey =
     // --------------------------------------------------------
     // 7. Convert Ghana cedis to pesewas
     //
+    // GH₵10 = 1000 pesewas
     // GH₵40 = 4000 pesewas
     // --------------------------------------------------------
 
@@ -145,7 +143,7 @@ const secretKey =
       Math.round(amountGHS * 100);
 
     // --------------------------------------------------------
-    // 8. Generate a unique reference
+    // 8. Generate unique transaction reference
     // --------------------------------------------------------
 
     const reference =
@@ -155,25 +153,41 @@ const secretKey =
         .toUpperCase()}`;
 
     // --------------------------------------------------------
-    // 9. Optional callback URL
+    // 9. Build callback URL
     //
-    // If SITE_URL exists in Netlify, Paystack can redirect
-    // the customer back to the website after payment.
+    // This is where Paystack should return the customer
+    // after payment.
     // --------------------------------------------------------
 
     const siteUrl =
-      process.env.SITE_URL;
+      process.env.SITE_URL ||
+      "https://tokboost-gh.netlify.app";
+
+    const callbackUrl =
+      `${siteUrl.replace(/\/$/, "")}/payment-success.html`;
+
+    // --------------------------------------------------------
+    // 10. Build Paystack transaction
+    // --------------------------------------------------------
 
     const paymentData = {
       email: email,
+
       amount: amountInPesewas,
+
       currency: "GHS",
+
       reference: reference,
+
+      callback_url: callbackUrl,
 
       metadata: {
         customerName: customerName,
+
         packageName: packageName,
+
         amountGHS: amountGHS,
+
         tiktokTarget: tiktokTarget,
 
         serviceType:
@@ -185,14 +199,8 @@ const secretKey =
       }
     };
 
-    // Add callback only when SITE_URL is configured.
-    if (siteUrl) {
-      paymentData.callback_url =
-        `${siteUrl.replace(/\/$/, "")}/payment-success.html`;
-    }
-
     // --------------------------------------------------------
-    // 10. Initialize Paystack transaction
+    // 11. Initialize Paystack transaction
     // --------------------------------------------------------
 
     const response = await fetch(
@@ -208,7 +216,8 @@ const secretKey =
             "application/json"
         },
 
-        body: JSON.stringify(paymentData)
+        body:
+          JSON.stringify(paymentData)
       }
     );
 
@@ -216,7 +225,7 @@ const secretKey =
       await response.json();
 
     // --------------------------------------------------------
-    // 11. Handle Paystack errors
+    // 12. Handle Paystack errors
     // --------------------------------------------------------
 
     if (!response.ok || !data.status) {
@@ -236,6 +245,7 @@ const secretKey =
 
         body: JSON.stringify({
           status: false,
+
           error:
             data.message ||
             "Unable to initialize payment."
@@ -244,7 +254,37 @@ const secretKey =
     }
 
     // --------------------------------------------------------
-    // 12. Return only safe information to the browser
+    // 13. Make sure Paystack returned a checkout URL
+    // --------------------------------------------------------
+
+    if (
+      !data.data ||
+      !data.data.authorization_url
+    ) {
+      console.error(
+        "Paystack did not return authorization_url:",
+        data
+      );
+
+      return {
+        statusCode: 400,
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          status: false,
+
+          error:
+            "Paystack did not return a checkout URL."
+        })
+      };
+    }
+
+    // --------------------------------------------------------
+    // 14. Return safe information to the browser
     // --------------------------------------------------------
 
     return {
@@ -252,7 +292,10 @@ const secretKey =
 
       headers: {
         "Content-Type":
-          "application/json"
+          "application/json",
+
+        "Cache-Control":
+          "no-store"
       },
 
       body: JSON.stringify({
@@ -277,14 +320,17 @@ const secretKey =
           amountGHS,
 
         currency:
-          "GHS"
+          "GHS",
+
+        callback_url:
+          callbackUrl
       })
     };
 
   } catch (error) {
 
     // --------------------------------------------------------
-    // 13. Unexpected error
+    // 15. Unexpected error
     // --------------------------------------------------------
 
     console.error(
@@ -302,6 +348,7 @@ const secretKey =
 
       body: JSON.stringify({
         status: false,
+
         error:
           "Something went wrong while creating the payment."
       })
