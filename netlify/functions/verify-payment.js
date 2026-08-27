@@ -1,10 +1,13 @@
 // ============================================================
 // TOKBOOST GH
-// NETLIFY FUNCTION — VERIFY PAYSTACK PAYMENT
+// NETLIFY FUNCTION — VERIFY PAYSTACK PAYMENT + CREATE ORDER
 // ============================================================
 
 exports.handler = async (event) => {
-  // Only allow POST requests
+  // ----------------------------------------------------------
+  // 1. Only allow POST requests
+  // ----------------------------------------------------------
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -20,7 +23,7 @@ exports.handler = async (event) => {
 
   try {
     // --------------------------------------------------------
-    // 1. Read request body
+    // 2. Read request body
     // --------------------------------------------------------
 
     const body = JSON.parse(event.body || "{}");
@@ -42,7 +45,7 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 2. Get Paystack secret key
+    // 3. Get Paystack secret key
     // --------------------------------------------------------
 
     const secretKey =
@@ -67,14 +70,41 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 3. Verify transaction with Paystack
+    // 4. Get Supabase credentials
+    // --------------------------------------------------------
+
+    const supabaseUrl =
+      process.env.SUPABASE_URL;
+
+    const supabaseKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.error(
+        "Supabase environment variables are missing."
+      );
+
+      return {
+        statusCode: 500,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          status: false,
+          paid: false,
+          error: "Order database is not configured."
+        })
+      };
+    }
+
+    // --------------------------------------------------------
+    // 5. Verify transaction with Paystack
     // --------------------------------------------------------
 
     const response = await fetch(
       `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
       {
         method: "GET",
-
         headers: {
           Authorization:
             `Bearer ${secretKey}`,
@@ -88,7 +118,11 @@ exports.handler = async (event) => {
     const data =
       await response.json();
 
-    if (!response.ok || !data.status || !data.data) {
+    if (
+      !response.ok ||
+      !data.status ||
+      !data.data
+    ) {
       console.error(
         "Paystack verification failed:",
         data
@@ -96,12 +130,10 @@ exports.handler = async (event) => {
 
       return {
         statusCode: 400,
-
         headers: {
           "Content-Type":
             "application/json"
         },
-
         body: JSON.stringify({
           status: false,
           paid: false,
@@ -116,18 +148,16 @@ exports.handler = async (event) => {
       data.data;
 
     // --------------------------------------------------------
-    // 4. Check transaction status
+    // 6. Check transaction status
     // --------------------------------------------------------
 
     if (transaction.status !== "success") {
       return {
         statusCode: 400,
-
         headers: {
           "Content-Type":
             "application/json"
         },
-
         body: JSON.stringify({
           status: false,
           paid: false,
@@ -138,18 +168,16 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 5. Check currency
+    // 7. Check currency
     // --------------------------------------------------------
 
     if (transaction.currency !== "GHS") {
       return {
         statusCode: 400,
-
         headers: {
           "Content-Type":
             "application/json"
         },
-
         body: JSON.stringify({
           status: false,
           paid: false,
@@ -160,7 +188,7 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 6. Get package from Paystack metadata
+    // 8. Get information from Paystack metadata
     // --------------------------------------------------------
 
     const metadata =
@@ -169,14 +197,16 @@ exports.handler = async (event) => {
     const packageName =
       metadata.packageName;
 
-    const amountGHS =
-      Number(
-        metadata.amountGHS ||
-        Number(transaction.amount) / 100
-      );
+    const customerName =
+      metadata.customerName ||
+      "";
+
+    const tiktokTarget =
+      metadata.tiktokTarget ||
+      "";
 
     // --------------------------------------------------------
-    // 7. Make sure package information exists
+    // 9. Make sure package exists
     // --------------------------------------------------------
 
     if (!packageName) {
@@ -187,12 +217,10 @@ exports.handler = async (event) => {
 
       return {
         statusCode: 400,
-
         headers: {
           "Content-Type":
             "application/json"
         },
-
         body: JSON.stringify({
           status: false,
           paid: false,
@@ -203,7 +231,7 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 8. Server-side package prices
+    // 10. Server-side package prices
     // --------------------------------------------------------
 
     const packages = {
@@ -219,18 +247,16 @@ exports.handler = async (event) => {
 
     if (!expectedAmount) {
       console.error(
-        "Unknown package from Paystack:",
+        "Unknown package:",
         packageName
       );
 
       return {
         statusCode: 400,
-
         headers: {
           "Content-Type":
             "application/json"
         },
-
         body: JSON.stringify({
           status: false,
           paid: false,
@@ -241,7 +267,7 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 9. Check amount
+    // 11. Check amount
     // --------------------------------------------------------
 
     const expectedAmountInPesewas =
@@ -264,12 +290,10 @@ exports.handler = async (event) => {
 
       return {
         statusCode: 400,
-
         headers: {
           "Content-Type":
             "application/json"
         },
-
         body: JSON.stringify({
           status: false,
           paid: false,
@@ -280,7 +304,252 @@ exports.handler = async (event) => {
     }
 
     // --------------------------------------------------------
-    // 10. Payment successfully verified
+    // 12. Get customer email
+    // --------------------------------------------------------
+
+    const customerEmail =
+      transaction.customer &&
+      transaction.customer.email
+        ? transaction.customer.email
+        : "";
+
+    if (!customerEmail) {
+      return {
+        statusCode: 400,
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+          status: false,
+          paid: false,
+          error:
+            "Customer email was not found."
+        })
+      };
+    }
+
+    // --------------------------------------------------------
+    // 13. Make sure TikTok target exists
+    // --------------------------------------------------------
+
+    if (!tiktokTarget) {
+      console.error(
+        "TikTok target missing from metadata:",
+        metadata
+      );
+
+      return {
+        statusCode: 400,
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+          status: false,
+          paid: false,
+          error:
+            "TikTok target was not found for this payment."
+        })
+      };
+    }
+
+    // --------------------------------------------------------
+    // 14. Check whether this order already exists
+    //
+    // This prevents duplicate orders if the customer refreshes
+    // the payment-success page.
+    // --------------------------------------------------------
+
+    const existingOrderResponse =
+      await fetch(
+        `${supabaseUrl}/rest/v1/tokboost_orders?reference=eq.${encodeURIComponent(
+          transaction.reference
+        )}&select=id,reference,customer_name,email,package_name,amount,tiktok_target,status,created_at&limit=1`,
+        {
+          method: "GET",
+
+          headers: {
+            apikey:
+              supabaseKey,
+
+            Authorization:
+              `Bearer ${supabaseKey}`,
+
+            "Content-Type":
+              "application/json"
+          }
+        }
+      );
+
+    const existingOrders =
+      await existingOrderResponse.json();
+
+    if (
+      !existingOrderResponse.ok
+    ) {
+      console.error(
+        "Could not check existing order:",
+        existingOrders
+      );
+
+      return {
+        statusCode: 500,
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+          status: false,
+          paid: false,
+          error:
+            "Could not check the order database."
+        })
+      };
+    }
+
+    // --------------------------------------------------------
+    // 15. If order already exists, return it
+    // --------------------------------------------------------
+
+    if (
+      Array.isArray(existingOrders) &&
+      existingOrders.length > 0
+    ) {
+      const existingOrder =
+        existingOrders[0];
+
+      return {
+        statusCode: 200,
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+          status: true,
+          paid: true,
+          orderCreated: true,
+          alreadyExists: true,
+
+          orderId:
+            existingOrder.id,
+
+          reference:
+            existingOrder.reference,
+
+          packageName:
+            existingOrder.package_name,
+
+          amount:
+            existingOrder.amount,
+
+          currency:
+            "GHS",
+
+          customerEmail:
+            existingOrder.email,
+
+          customerName:
+            existingOrder.customer_name,
+
+          tiktokTarget:
+            existingOrder.tiktok_target,
+
+          orderStatus:
+            existingOrder.status,
+
+          message:
+            "Payment verified and order already exists."
+        })
+      };
+    }
+
+    // --------------------------------------------------------
+    // 16. Create the TokBoost order
+    // --------------------------------------------------------
+
+    const order = {
+      reference:
+        transaction.reference,
+
+      customer_name:
+        customerName,
+
+      email:
+        customerEmail,
+
+      package_name:
+        packageName,
+
+      amount:
+        expectedAmount,
+
+      tiktok_target:
+        tiktokTarget,
+
+      status:
+        "processing"
+    };
+
+    const createOrderResponse =
+      await fetch(
+        `${supabaseUrl}/rest/v1/tokboost_orders`,
+        {
+          method: "POST",
+
+          headers: {
+            apikey:
+              supabaseKey,
+
+            Authorization:
+              `Bearer ${supabaseKey}`,
+
+            "Content-Type":
+              "application/json",
+
+            Prefer:
+              "return=representation"
+          },
+
+          body:
+            JSON.stringify(order)
+        }
+      );
+
+    const createdOrders =
+      await createOrderResponse.json();
+
+    if (
+      !createOrderResponse.ok
+    ) {
+      console.error(
+        "Failed to create TokBoost order:",
+        createdOrders
+      );
+
+      return {
+        statusCode: 500,
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+          status: false,
+          paid: true,
+          orderCreated: false,
+          error:
+            "Payment was verified, but we could not create your order. Please contact support."
+        })
+      };
+    }
+
+    const createdOrder =
+      Array.isArray(createdOrders)
+        ? createdOrders[0]
+        : createdOrders;
+
+    // --------------------------------------------------------
+    // 17. Return successful result
     // --------------------------------------------------------
 
     return {
@@ -294,6 +563,11 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         status: true,
         paid: true,
+        orderCreated: true,
+        alreadyExists: false,
+
+        orderId:
+          createdOrder.id,
 
         reference:
           transaction.reference,
@@ -308,17 +582,27 @@ exports.handler = async (event) => {
           "GHS",
 
         customerEmail:
-          transaction.customer &&
-          transaction.customer.email
-            ? transaction.customer.email
-            : null,
+          customerEmail,
+
+        customerName:
+          customerName,
+
+        tiktokTarget:
+          tiktokTarget,
+
+        orderStatus:
+          "processing",
 
         message:
-          "Payment verified successfully."
+          "Payment verified and order created successfully."
       })
     };
 
   } catch (error) {
+
+    // --------------------------------------------------------
+    // 18. Unexpected error
+    // --------------------------------------------------------
 
     console.error(
       "Verify payment error:",
