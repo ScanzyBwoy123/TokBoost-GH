@@ -76,12 +76,12 @@ exports.handler = async (event) => {
     // --------------------------------------------------------
 
     const secretKey =
-      process.env.PAYSTACK_SECRET_KEY;
+  process.env.PAYSTACK_API_KEY;
 
     if (!secretKey) {
-      console.error(
-        "PAYSTACK_SECRET_KEY is not configured."
-      );
+  console.error(
+    "PAYSTACK_API_KEY is not configured."
+  );
 
       return {
         statusCode: 500,
