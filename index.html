@@ -917,6 +917,10 @@
       // success page can identify the transaction.
       if (data.reference) {
         localStorage.setItem(
+  "tokboost_package_name",
+  selectedPackageName
+);
+        localStorage.setItem(
           "tokboost_payment_reference",
           data.reference
         );
