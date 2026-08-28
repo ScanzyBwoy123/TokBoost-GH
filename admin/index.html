@@ -992,13 +992,20 @@
         }
 
 
-        saveToken(
-          data.token
-        );
+      saveToken(
+  data.token
+);
 
-        showDashboard();
+showDashboard();
 
-        await loadOrders();
+try {
+  await loadOrders();
+} catch (error) {
+  console.error(
+    "Admin orders loading error:",
+    error
+  );
+}  
 
 
       } catch (error) {
