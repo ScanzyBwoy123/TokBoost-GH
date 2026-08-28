@@ -920,18 +920,14 @@
 
 
       if (
-        response.status === 401
-      ) {
+  response.status === 401
+) {
 
-        clearToken();
-
-        showLogin();
-
-        throw new Error(
-          data.error ||
-          "Your administrator session has expired."
-        );
-      }
+  throw new Error(
+    data.error ||
+    "Unauthorized."
+  );
+}
 
 
       if (!response.ok) {
