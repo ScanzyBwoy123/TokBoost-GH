@@ -1925,13 +1925,13 @@ try {
         );
       }
     );
-/* ========================================================
-   EVENT: PROMOTE ORDER
-======================================================== */
+// ========================================================
+// EVENT: START PROMOTION
+// ========================================================
 
 ordersBody.addEventListener(
   "click",
-  event => {
+  async event => {
 
     const button =
       event.target.closest(
@@ -1948,32 +1948,83 @@ ordersBody.addEventListener(
     const target =
       button.dataset.tiktokTarget;
 
-    if (!target) {
+    if (!orderId) {
+      showMessage(
+        "Order ID is missing.",
+        "error"
+      );
+      return;
+    }
 
+    if (!target) {
       showMessage(
         "TikTok target is missing.",
         "error"
       );
-
       return;
     }
 
-    /*
-     * For now, open the TikTok target.
-     * The actual paid promotion will be handled
-     * through the legitimate TikTok promotion process.
-     */
-
+    // Open the customer's TikTok target first.
     window.open(
       target,
       "_blank",
       "noopener,noreferrer"
     );
 
-    showMessage(
-      "TikTok promotion page opened.",
-      "success"
-    );
+    try {
+
+      // Change the order to Promotion.
+      await apiRequest(
+        API_URL,
+        {
+          method: "POST",
+
+          body: JSON.stringify({
+            action:
+              "update_status",
+
+            orderId:
+              orderId,
+
+            status:
+              "promotion"
+          })
+        }
+      );
+
+      // Update the local order immediately.
+      const order =
+        orders.find(
+          item =>
+            String(item.id) ===
+            String(orderId)
+        );
+
+      if (order) {
+        order.status =
+          "promotion";
+      }
+
+      renderOrders();
+
+      showMessage(
+        "Promotion started. TikTok target opened and order moved to Promotion.",
+        "success"
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Start promotion error:",
+        error
+      );
+
+      showMessage(
+        error.message ||
+          "Unable to update promotion status.",
+        "error"
+      );
+    }
   }
 );
     /* ========================================================
