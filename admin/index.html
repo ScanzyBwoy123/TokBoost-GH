@@ -1957,7 +1957,13 @@ const promotionUrl =
   "_blank",
   "noopener,noreferrer"
 );
-
+if (orderId) {
+  await updateOrderStatus(
+    orderId,
+    "promotion",
+    button
+  );
+}
     showMessage(
       "TikTok promotion page opened.",
       "success"
