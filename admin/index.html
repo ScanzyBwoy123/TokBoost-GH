@@ -1960,7 +1960,57 @@ ordersBody.addEventListener(
     );
   }
 );
+/* ========================================================
+   EVENT: PROMOTE ORDER
+======================================================== */
 
+ordersBody.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        ".btn-promote"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    const orderId =
+      button.dataset.promoteId;
+
+    const target =
+      button.dataset.tiktokTarget;
+
+    if (!target) {
+
+      showMessage(
+        "TikTok target is missing.",
+        "error"
+      );
+
+      return;
+    }
+
+    /*
+     * For now, open the TikTok target.
+     * The actual paid promotion will be handled
+     * through the legitimate TikTok promotion process.
+     */
+
+    window.open(
+      target,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    showMessage(
+      "TikTok promotion page opened.",
+      "success"
+    );
+  }
+);
     /* ========================================================
        INITIAL SESSION CHECK
     ======================================================== */
