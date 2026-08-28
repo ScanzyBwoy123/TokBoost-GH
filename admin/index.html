@@ -1925,41 +1925,6 @@ try {
         );
       }
     );
-/* ========================================================
-   EVENT: PROMOTE ORDER
-======================================================== */
-
-ordersBody.addEventListener(
-  "click",
-  event => {
-
-    const button =
-      event.target.closest(".btn-promote");
-
-    if (!button) {
-      return;
-    }
-
-    const target =
-      button.dataset.tiktokTarget;
-const promotionUrl =
-  target.startsWith("http://") ||
-  target.startsWith("https://")
-    ? target
-    : `https://www.tiktok.com/${target.replace(/^\/+/, "")}`;
-    if (!target) {
-      showMessage(
-        "TikTok target is missing.",
-        "error"
-      );
-      return;
-    }
-
-    window.open(
-  promotionUrl,
-  "_blank",
-  "noopener,noreferrer"
-);
 if (orderId) {
   await updateOrderStatus(
     orderId,
