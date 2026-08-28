@@ -366,8 +366,10 @@ exports.handler = async event => {
             401,
             {
               status: false,
-              error:
-                "Unauthorized."
+             error:
+  token
+    ? "Admin token verification failed."
+    : "Admin token was not received." 
             }
           );
         }
