@@ -1629,8 +1629,44 @@
                 ${escapeHTML(
                   status
                 )}
-              </div>
+                            </div>
 
+            </td>
+
+            <td>
+              <div class="promotion-actions">
+
+                <button
+                  type="button"
+                  class="btn btn-promote"
+                  data-promote-id="${escapeHTML(
+                    order.id
+                  )}"
+                  data-tiktok-target="${escapeHTML(
+                    order.tiktok_target || ""
+                  )}"
+                >
+                  🚀 Promote
+                </button>
+
+                ${
+                  order.tiktok_target
+                    ? `
+                      <a
+                        class="tiktok-link"
+                        href="${escapeHTML(
+                          order.tiktok_target
+                        )}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View TikTok
+                      </a>
+                    `
+                    : ""
+                }
+
+              </div>
             </td>
           `;
 
