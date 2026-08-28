@@ -1939,7 +1939,11 @@ ordersBody.addEventListener(
 
     const target =
       button.dataset.tiktokTarget;
-
+const promotionUrl =
+  target.startsWith("http://") ||
+  target.startsWith("https://")
+    ? target
+    : `https://www.tiktok.com/${target.replace(/^\/+/, "")}`;
     if (!target) {
       showMessage(
         "TikTok target is missing.",
@@ -1949,10 +1953,10 @@ ordersBody.addEventListener(
     }
 
     window.open(
-      target,
-      "_blank",
-      "noopener,noreferrer"
-    );
+  promotionUrl,
+  "_blank",
+  "noopener,noreferrer"
+);
 
     showMessage(
       "TikTok promotion page opened.",
