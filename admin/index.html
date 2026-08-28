@@ -1922,7 +1922,44 @@
         );
       }
     );
+/* ========================================================
+   EVENT: PROMOTE ORDER
+======================================================== */
 
+ordersBody.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(".btn-promote");
+
+    if (!button) {
+      return;
+    }
+
+    const target =
+      button.dataset.tiktokTarget;
+
+    if (!target) {
+      showMessage(
+        "TikTok target is missing.",
+        "error"
+      );
+      return;
+    }
+
+    window.open(
+      target,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    showMessage(
+      "TikTok promotion page opened.",
+      "success"
+    );
+  }
+);
 
     /* ========================================================
        INITIAL SESSION CHECK
